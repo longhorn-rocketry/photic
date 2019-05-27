@@ -10,7 +10,7 @@ This library interfaces best with Arduino microcontrollers, but is abstract enou
 
 ---
 
-#### Launch Day is Tomorrow, We Have No Software and I'm Not Lars Blackmore; Send Help
+### Launch Day is Tomorrow, We Have No Software and I'm Not Lars Blackmore; Send Help
 
 Not a problem. Import all of Photonic with a single line:
 
@@ -83,7 +83,7 @@ You're ready to fly.
 
 ---
 
-#### Installation
+### Installation
 
 Point your terminal at `Arduino/libraries/` and enter
 
