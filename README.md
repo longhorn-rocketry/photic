@@ -18,7 +18,7 @@ Not a problem. Import all of Photonic with a single line:
 #include <photonic.h>
 ```
 
-Then, tell Photonic a little bit more about your rocket.
+Then, tell Photonic a little bit about your rocket.
 
 ```cpp
 using namespace photonic;
