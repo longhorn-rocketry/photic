@@ -74,6 +74,7 @@ public:
 		@brief allows history mutation indexing via []
 	*/
   T& operator[](unsigned int i) {
+		computed = false;
 		return data[i];
 	}
 
@@ -87,6 +88,7 @@ public:
 		if (data.size() == size)
 			data.erase(data.begin());
 		data.push_back(t);
+		computed = false;
 	}
 };
 
