@@ -16,15 +16,13 @@ Import all of Photonic with a single line:
 
 ```cpp
 #include <photonic.h>
+
+using namespace photonic;
 ```
 
 Then, tell Photonic a little bit about your rocket.
 
 ```cpp
-using namespace photonic;
-
-...
-
 photonic_configure(ROCKET_IGNITION_G_TRIGGER, 3.0);
 photonic_configure(ROCKET_NO_IGNITION_GRACE_PERIOD, 60.0 * 10);
 photonic_configure(ROCKET_MICROCONTROLLER, TEENSY_31);
@@ -52,7 +50,7 @@ wait_for_liftoff();
 Once we're in the air, we'll want to record telemetry...
 
 ```cpp
-TelemetryHeap heap; // memory IO is understood based on configured microcontroller
+TelemetryHeap heap; // memory IO is understood inherently based on ROCKET_MICROCONTROLLER
 int altitude_data_id = heap.add_block(1024); // block with 1 kB of storage
 
 baro->update();
