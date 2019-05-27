@@ -111,6 +111,9 @@ public:
 	A collection of blocks identified by ID. Ideally, only one of these is created
 	per flight computer. Individual blocks represent different telemetry
 	distinctions, e.g. pressure logs, altitude logs, etc.
+
+	Telemetry is stored in Little Endian. Best practice sees all block start and
+	end addresses as multiples of 2.
 */
 class TelemetryHeap {
 protected:
@@ -153,12 +156,17 @@ public:
 		Retrieves all data stored within a block. Client is responsible for type
 		interpretation and deallocation of the generated array. Array will be of
 		length get_block_size(block_id) bytes, and contain
-		get_block_size(block_id) / sizeof(T) for a given type T.
+		get_block_size(block_id) / sizeof(T) elements of a given type T.
 
 		@param block_id block ID
 		@return pointer to array of retrieved data
 	*/
 	void* read_block(int block_id);
+
+	/**
+		@brief decompresses a block of short floats into native floats
+	*/
+	float* decompress(int block_id);
 
 	/**
 		@brief pushes a byte onto a block and returns if the operation succeeded

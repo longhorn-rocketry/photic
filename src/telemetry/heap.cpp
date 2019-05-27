@@ -137,10 +137,23 @@ int TelemetryHeap::add_block(int addr_start, int addr_end) {
 void* TelemetryHeap::read_block(int block_id) {
 	HeapBlock *block = blocks[block_id];
  	unsigned int block_start = block->get_start(), block_end = block->get_end();
-	byte *arr = new byte[block_start - block_end];
+	byte *arr = new byte[block_end - block_start];
 	for (unsigned int i = block_start; i < block_end; i++)
 		arr[i - block_start] = block->read(i);
 	return (void*)arr;
+}
+
+float* TelemetryHeap::decompress(int block_id) {
+	HeapBlock *block = blocks[block_id];
+ 	unsigned int block_start = block->get_start(), block_end = block->get_end();
+	float *arr = new float[(block_end - block_start) / 2];
+	for (unsigned int i = block_start; i < block_end; i += 2) {
+		byte b1 = block->read(i), b0 = block->read(i + 1);
+		float16 f16 = (b1 << 8) | b0;
+		float f = Float16Compressor::decompress(f16);
+		arr[i / 2 - block_start] = f;
+	}
+	return arr;
 }
 
 bool TelemetryHeap::log(int block_id, byte b) {

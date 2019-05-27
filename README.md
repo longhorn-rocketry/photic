@@ -52,7 +52,7 @@ wait_for_liftoff();
 Once we're in the air, we'll want to record telemetry...
 
 ```cpp
-TelemetryHeap heap; // memory IO is understood based on microcontroller config
+TelemetryHeap heap; // memory IO is understood based on configured microcontroller
 int altitude_data_id = heap.add_block(1024); // block with 1 kB of storage
 
 baro->update();
@@ -64,9 +64,10 @@ heap.logc(altitude_data_id, baro->get_altitude());
 ...and after recovery, we'll need to retrieve it.
 
 ```cpp
-float *altitude_data = heap.read_block(altitude_data_id);
+float *altitude_data = heap.decompress(block_id);
+int altitude_data_size = heap.get_block_size(altitude_data_id) / 2; // 2 bytes per float16
 
-for (int i = 0; i < heap.get_block_size(altitude_data_id); i++)
+for (int i = 0; i < altitude_data_size; i++)
 	Serial.printf("%f\n", altitude_data[i]);
 
 delete[] altitude_data;
