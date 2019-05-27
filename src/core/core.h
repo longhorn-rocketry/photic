@@ -13,6 +13,8 @@ enum config {
 	ROCKET_NO_IGNITION_GRACE_PERIOD,
 	ROCKET_BURNOUT_DETECTION_NEGLIGENCE,
 	ROCKET_APOGEE_DETECTION_NEGLIGENCE,
+	ROCKET_BURNOUT_ACCELERATION,
+	ROCKET_APOGEE_VELOCITY,
 
 	ROCKET_WAIT_FOR_LIFTOFF_MA_SIZE,
 
@@ -58,6 +60,8 @@ extern float __rocket_ignition_g_trigger;
 extern float __rocket_no_ignition_grace_period;
 extern float __rocket_burnout_detection_negligence;
 extern float __rocket_apogee_detection_negligence;
+extern float __rocket_burnout_acceleration;
+extern float __rocket_apogee_velocity;
 
 extern int __rocket_wait_for_liftoff_ma_size;
 

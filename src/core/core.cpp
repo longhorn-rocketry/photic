@@ -16,6 +16,8 @@ float __rocket_ignition_g_trigger = 0;
 float __rocket_no_ignition_grace_period = 0;
 float __rocket_burnout_detection_negligence = 0.25;
 float __rocket_apogee_detection_negligence = 0.25;
+float __rocket_burnout_acceleration = -1;
+float __rocket_apogee_velocity = 0;
 
 int __rocket_wait_for_liftoff_ma_size = 10;
 
@@ -61,6 +63,10 @@ void photonic_configure(config c, float f) {
 		__rocket_burnout_detection_negligence = f;
 	else if (c == ROCKET_APOGEE_DETECTION_NEGLIGENCE)
 		__rocket_apogee_detection_negligence = f;
+	else if (c == ROCKET_BURNOUT_ACCELERATION)
+		__rocket_burnout_acceleration = f;
+	else if (c == ROCKET_APOGEE_VELOCITY)
+		__rocket_apogee_velocity = f;
 }
 
 void photonic_configure(config c, int i) {
@@ -148,7 +154,8 @@ bool check_for_burnout() {
 		return false;
 
 	float accel_avg = __rocket_vertical_accel_history->mean();
-	if (approx(accel_avg, -1, __rocket_burnout_detection_negligence))
+	if (approx(accel_avg, __rocket_burnout_acceleration,
+			__rocket_burnout_detection_negligence))
 		__flight_event_burnout = true;
 
 	return __flight_event_burnout;
@@ -161,7 +168,8 @@ bool check_for_apogee() {
 		return false;
 
 	float velocity_avg = __rocket_vertical_velocity_history->mean();
-	if (approx(velocity_avg, 0, __rocket_apogee_detection_negligence))
+	if (approx(velocity_avg, __rocket_apogee_velocity,
+			__rocket_apogee_detection_negligence))
 		__flight_event_apogee = true;
 
 	return __flight_event_apogee;
