@@ -69,16 +69,6 @@ for (int i = 0; i < heap.get_block_size(altitude_data_id); i++)
 delete[] altitude_data;
 ```
 
-Perhaps your microcontroller has lots of storage and therefore no need for telemetry compression. The overloaded `TelemetryHeap::log` method covers all of your high-precision needs:
-
-```cpp
-long long pressure = baro.get_pressure();
-double temperature = baro.get_temperature();
-
-heap.log(pressure_data_id, pressure);
-heap.log(temperature_data_id, temperature);
-```
-
 You're ready to fly.
 
 ---
