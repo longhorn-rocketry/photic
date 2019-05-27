@@ -80,7 +80,7 @@ You're ready to fly.
 Point your terminal at `Arduino/libraries/` and enter
 
 ```
-git clone https://github.com/longhorn-rocketry/photonic
+git clone https://github.com/longhorn-rocketry/photonic.git
 ```
 
 Alternatively, download this repository as a zip and import it within Arduino IDE via `Sketch > Include Library > Add .ZIP Library`.
