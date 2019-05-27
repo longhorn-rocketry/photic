@@ -24,7 +24,7 @@ Then, tell Photonic a little bit about your rocket.
 
 ```cpp
 photonic_configure(ROCKET_IGNITION_G_TRIGGER, 3.0);
-photonic_configure(ROCKET_NO_IGNITION_GRACE_PERIOD, 60.0 * 10);
+photonic_configure(ROCKET_NO_IGNITION_GRACE_PERIOD, 60.0 * 10); // minimum 10 minutes before ignition
 photonic_configure(ROCKET_MICROCONTROLLER, TEENSY_31);
 ```
 
@@ -62,7 +62,7 @@ heap.logc(altitude_data_id, baro->get_altitude());
 ...and after recovery, we'll need to retrieve it.
 
 ```cpp
-float *altitude_data = heap.decompress(block_id);
+float *altitude_data = heap.decompress(altitude_data_id);
 int altitude_data_size = heap.get_block_size(altitude_data_id) / 2; // 2 bytes per float16
 
 for (int i = 0; i < altitude_data_size; i++)
