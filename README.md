@@ -12,7 +12,7 @@ This library interfaces best with Arduino microcontrollers, but is abstract enou
 
 ### Launch Day is Tomorrow, We Have No Software and I'm Not Lars Blackmore; Send Help
 
-Not a problem. Import all of Photonic with a single line:
+Import all of Photonic with a single line:
 
 ```cpp
 #include <photonic.h>
@@ -23,8 +23,11 @@ Then, tell Photonic a little bit about your rocket.
 ```cpp
 using namespace photonic;
 
+...
+
 photonic_configure(ROCKET_IGNITION_G_TRIGGER, 3.0);
 photonic_configure(ROCKET_NO_IGNITION_GRACE_PERIOD, 60.0 * 10);
+photonic_configure(ROCKET_MICROCONTROLLER, TEENSY_31);
 ```
 
 Interfacing your sensors with Photonic is as simple as overriding the `initialize` and `update` methods of a particular abstract sensor class. For certain common sensors, such as the Adafruit BMP085, Photonic already has an implementation.
@@ -49,7 +52,7 @@ wait_for_liftoff();
 Once we're in the air, we'll want to record telemetry...
 
 ```cpp
-TelemetryHeap heap(TEENSY_31); // our microcontroller of choice
+TelemetryHeap heap; // memory IO is understood based on microcontroller config
 int altitude_data_id = heap.add_block(1024); // block with 1 kB of storage
 
 baro->update();
@@ -81,8 +84,8 @@ Point your terminal at `Arduino/libraries/` and enter
 git clone https://github.com/longhorn-rocketry/photonic
 ```
 
-Alternatively, download this repository as a zip and import it within Arduino IDE via `Sketch > Include Library > Add .ZIP Library...`.
+Alternatively, download this repository as a zip and import it within Arduino IDE via `Sketch > Include Library > Add .ZIP Library`.
 
 ---
 
-Created and maintained by the [Longhorn Rocketry Association](http://www.longhornrocketry.org/) of the University of Texas at Austin.
+Maintained by the [Longhorn Rocketry Association](http://www.longhornrocketry.org/) of the University of Texas at Austin.

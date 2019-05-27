@@ -1,3 +1,4 @@
+#include "core/core.h"
 #include "telemetry/arduino_heap.h"
 #include "telemetry/heap.h"
 
@@ -50,8 +51,8 @@ TelemetryHeap::TelemetryHeap(int addr_start, int addr_end, HeapIO *io) {
 	this->io = io;
 }
 
-TelemetryHeap::TelemetryHeap(microcontroller_model model) {
-	switch(model) {
+TelemetryHeap::TelemetryHeap() {
+	switch(__rocket_microcontroller) {
 		case TEENSY_36:
 			addr_start = 0;
 			addr_end = 4096;
@@ -119,12 +120,16 @@ TelemetryHeap::TelemetryHeap(microcontroller_model model) {
 }
 
 TelemetryHeap::~TelemetryHeap() {
-	delete io;
+	if (io != nullptr)
+		delete io;
 	for (unsigned int i = 0; i < blocks.size(); i++)
 		delete blocks[i];
 }
 
 int TelemetryHeap::add_block(int addr_start, int addr_end) {
+	if (io == nullptr)
+		return -1;
+
 	blocks.push_back(new HeapBlock(addr_start, addr_end, io));
 	return blocks.size() - 1;
 }

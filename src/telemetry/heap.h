@@ -25,23 +25,6 @@ union TelemetryTypes {
 };
 
 /**
-	Microcontroller models that TelemetryHeap recognizes as corresponding to
-	specific memory handlers
-*/
-enum microcontroller_model {
-	TEENSY_36,
-	TEENSY_35,
-	TEENSY_32,
-	TEENSY_31,
-	TEENSY_30,
-	TEENSY_LC,
-	TEENSYPP_20,
-	TEENSY_20,
-	TEENSYPP_10,
-	TEENSY_10
-};
-
-/**
 	Abstraction of a memory handler; reads and writes data on the byte level to
 	storage of some kind. See telemetry/teensy_heap.h for an example
 	implementation.
@@ -146,11 +129,10 @@ public:
 	TelemetryHeap(int addr_start, int addr_end, HeapIO *io);
 
 	/**
-		Automatically configures the heap based on microcontroller model.
-
-		@param model model
+		Automatically configures the heap based on microcontroller model specified
+		via photonic_configure.
 	*/
-	TelemetryHeap(microcontroller_model model);
+	TelemetryHeap();
 
 	/**
 		@brief tears down the heap by deallocating the memory handler and all
