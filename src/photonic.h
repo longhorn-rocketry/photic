@@ -3,6 +3,8 @@
 
 #include "core/core.h"
 
+#include "math/rocket_math.h"
+
 #include "sensor/imu.h"
 #include "sensor/barometer.h"
 #include "sensor/BMP085_barometer.h"

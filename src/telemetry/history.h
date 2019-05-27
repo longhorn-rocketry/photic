@@ -1,6 +1,7 @@
 #ifndef PHOTONIC_TELEMETRY_HISTORY_H
 #define PHOTONIC_TELEMETRY_HISTORY_H
 
+#include <math.h>
 #include <vector>
 
 namespace photonic {

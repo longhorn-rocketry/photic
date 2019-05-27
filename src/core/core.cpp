@@ -1,4 +1,5 @@
 #include "core/core.h"
+#include "math/rocket_math.h"
 
 #include <math.h>
 
@@ -8,14 +9,18 @@ bool __photonic_has_initialized = false;
 float __photonic_epoch_time = -1;
 float __rocket_ignition_time = -1;
 
+bool __flight_event_burnout = false;
+
 float __rocket_ignition_g_trigger = 0;
 float __rocket_no_ignition_grace_period = 0;
+float __rocket_burnout_detection_negligence = 0.25;
 
 int __rocket_wait_for_liftoff_ma_size = 10;
 
 Imu *__rocket_primary_imu = nullptr;
 Barometer *__rocket_primary_barometer = nullptr;
 Timekeeper *__rocket_timekeeper = nullptr;
+history<float> *__rocket_vertical_accel_history = nullptr;
 
 axis __rocket_vertical_imu_axis = Z;
 
@@ -49,6 +54,8 @@ void photonic_configure(config c, float f) {
 		__rocket_ignition_g_trigger = f;
 	else if (c == ROCKET_NO_IGNITION_GRACE_PERIOD)
 		__rocket_no_ignition_grace_period = f;
+	else if (c == ROCKET_BURNOUT_DETECTION_NEGLIGENCE)
+		__rocket_burnout_detection_negligence = f;
 }
 
 void photonic_configure(config c, int i) {
@@ -69,6 +76,8 @@ void photonic_configure(config c, void *ptr) {
 		__rocket_primary_barometer = (Barometer*)ptr;
 	else if (c == ROCKET_TIMEKEEPER)
 		__rocket_timekeeper = (Timekeeper*)ptr;
+	else if (c == ROCKET_VERTICAL_ACCEL_HISTORY)
+		__rocket_vertical_accel_history = (history<float>*)ptr;
 }
 
 void photonic_configure(config c, axis a) {
@@ -123,6 +132,19 @@ void wait_for_liftoff() {
 	}
 
 	__rocket_ignition_time = __rocket_timekeeper->time();
+}
+
+bool check_for_burnout() {
+	if (__flight_event_burnout)
+		return true;
+	else if (__rocket_vertical_accel_history == nullptr)
+		return false;
+
+	float accel_avg = __rocket_vertical_accel_history->mean();
+	if (approx(accel_avg, -1, __rocket_burnout_detection_negligence))
+		__flight_event_burnout = true;
+
+	return __flight_event_burnout;
 }
 
 }; // end namespace photonic

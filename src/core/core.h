@@ -4,18 +4,21 @@
 #include "core/timekeeping.h"
 #include "sensor/barometer.h"
 #include "sensor/imu.h"
+#include "telemetry/history.h"
 
 namespace photonic {
 
 enum config {
 	ROCKET_IGNITION_G_TRIGGER,
 	ROCKET_NO_IGNITION_GRACE_PERIOD,
+	ROCKET_BURNOUT_DETECTION_NEGLIGENCE,
 
 	ROCKET_WAIT_FOR_LIFTOFF_MA_SIZE,
 
 	ROCKET_PRIMARY_IMU,
 	ROCKET_PRIMARY_BAROMETER,
 	ROCKET_TIMEKEEPER,
+	ROCKET_VERTICAL_ACCEL_HISTORY,
 
 	ROCKET_VERTICAL_IMU_AXIS,
 
@@ -46,14 +49,18 @@ extern bool __photonic_has_initialized;
 extern float __photonic_epoch_time;
 extern float __rocket_ignition_time;
 
+extern bool __flight_event_burnout;
+
 extern float __rocket_ignition_g_trigger;
 extern float __rocket_no_ignition_grace_period;
+extern float __rocket_burnout_detection_negligence;
 
 extern int __rocket_wait_for_liftoff_ma_size;
 
 extern Imu *__rocket_primary_imu;
 extern Barometer *__rocket_primary_barometer;
 extern Timekeeper *__rocket_timekeeper;
+extern history<float> *__rocket_vertical_accel_history;
 
 extern axis __rocket_vertical_imu_axis;
 
@@ -104,6 +111,11 @@ void photonic_configure(config c, microcontroller_model m);
 	       the configured G trigger
 */
 void wait_for_liftoff();
+
+/**
+	@brief gets whether or not engine burnout has occurred
+*/
+bool check_for_burnout();
 
 }; // end namespace photonic
 
