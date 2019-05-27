@@ -154,8 +154,9 @@ bool check_for_burnout() {
 		return false;
 
 	float accel_avg = __rocket_vertical_accel_history->mean();
-	if (approx(accel_avg, __rocket_burnout_acceleration,
-			__rocket_burnout_detection_negligence))
+	if (__rocket_vertical_accel_history->at_capacity() &&
+			approx(accel_avg, __rocket_burnout_acceleration,
+					__rocket_burnout_detection_negligence))
 		__flight_event_burnout = true;
 
 	return __flight_event_burnout;
@@ -168,8 +169,9 @@ bool check_for_apogee() {
 		return false;
 
 	float velocity_avg = __rocket_vertical_velocity_history->mean();
-	if (approx(velocity_avg, __rocket_apogee_velocity,
-			__rocket_apogee_detection_negligence))
+	if (__rocket_vertical_velocity_history->at_capacity() &&
+			approx(velocity_avg, __rocket_apogee_velocity,
+					__rocket_apogee_detection_negligence))
 		__flight_event_apogee = true;
 
 	return __flight_event_apogee;

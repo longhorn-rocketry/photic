@@ -91,6 +91,13 @@ public:
 		data.push_back(t);
 		computed = false;
 	}
+
+	/**
+		@briefs gets whether or not the history is full
+	*/
+	bool at_capacity() {
+		return data.size() == size;
+	}
 };
 
 }; // end namespace photonic
