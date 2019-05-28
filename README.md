@@ -54,7 +54,8 @@ TelemetryHeap heap; // memory IO is understood inherently based on ROCKET_MICROC
 int altitude_data_id = heap.add_block(1024); // block with 1 kB of storage
 
 barometer->update();
-heap.logc(altitude_data_id, barometer->get_altitude()); // logc = log compressed; float32 -> float16 for more storage density!
+// logc = log compressed; float32 -> float16 for twice the storage density!
+heap.logc(altitude_data_id, barometer->get_altitude());
 ```
 
 ...and after recovery, we'll need to retrieve it.
