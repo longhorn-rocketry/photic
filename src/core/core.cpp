@@ -31,6 +31,9 @@ axis __rocket_vertical_imu_axis = Z;
 
 microcontroller_model __rocket_microcontroller = NONE;
 
+apogee_detection_method __rocket_apogee_detection_method =
+		APPROX_FREEFALL_ACCEL;
+
 void photonic_init() {
 	__photonic_has_initialized = true;
 
@@ -109,6 +112,14 @@ void photonic_configure(config c, microcontroller_model m) {
 		__rocket_microcontroller = m;
 }
 
+void photonic_configure(config c, apogee_detection_method a) {
+	if (!__photonic_has_initialized)
+		photonic_init();
+
+	if (c == ROCKET_APOGEE_DETECTION_METHOD)
+		__rocket_apogee_detection_method = a;
+}
+
 void wait_for_liftoff() {
 	if (!__photonic_has_initialized || __rocket_primary_imu == nullptr ||
 			__rocket_timekeeper == nullptr)
@@ -166,11 +177,18 @@ bool check_for_apogee() {
 	else if (__rocket_vertical_velocity_history == nullptr)
 		return false;
 
-	float velocity_avg = __rocket_vertical_velocity_history->mean();
-	if (__rocket_vertical_velocity_history->at_capacity() &&
-			approx(velocity_avg, __rocket_apogee_velocity,
-					__rocket_apogee_detection_negligence))
-		__flight_event_apogee = true;
+	if (__rocket_apogee_detection_method == APPROX_ZERO_VELOCITY) {
+		float velocity_avg = __rocket_vertical_velocity_history->mean();
+		if (__rocket_vertical_velocity_history->at_capacity() &&
+				approx(velocity_avg, __rocket_apogee_velocity,
+						__rocket_apogee_detection_negligence))
+			__flight_event_apogee = true;
+	} else if (__rocket_apogee_detection_method == APPROX_FREEFALL_ACCEL) {
+		float accel_avg = __rocket_vertical_accel_history->mean();
+		if (__rocket_vertical_accel_history->at_capacity() &&
+				approx(accel_avg, -1, __rocket_apogee_detection_negligence))
+			__flight_event_apogee = true;
+	}
 
 	return __flight_event_apogee;
 }

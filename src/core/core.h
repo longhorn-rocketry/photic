@@ -26,7 +26,9 @@ enum config {
 
 	ROCKET_VERTICAL_IMU_AXIS,
 
-	ROCKET_MICROCONTROLLER
+	ROCKET_MICROCONTROLLER,
+
+	ROCKET_APOGEE_DETECTION_METHOD
 };
 
 enum axis {
@@ -47,6 +49,11 @@ enum microcontroller_model {
 	TEENSYPP_10,
 	TEENSY_10,
 	NONE
+};
+
+enum apogee_detection_method {
+	APPROX_ZERO_VELOCITY,
+	APPROX_FREEFALL_ACCEL
 };
 
 extern bool __photonic_has_initialized;
@@ -74,6 +81,8 @@ extern history<float> *__rocket_vertical_velocity_history;
 extern axis __rocket_vertical_imu_axis;
 
 extern microcontroller_model __rocket_microcontroller;
+
+extern apogee_detection_method __rocket_apogee_detection_method;
 
 /**
 	@brief one-time initialization function
@@ -114,6 +123,11 @@ void photonic_configure(config c, axis a);
 	@brief configuration for global microcontroller parameters
 */
 void photonic_configure(config c, microcontroller_model m);
+
+/**
+	@brief configuration for apogee detection method
+*/
+void photonic_configure(config c, apogee_detection_method a);
 
 /**
 	@brief blocks program flow until the IMU reads a sustained acceleration over
