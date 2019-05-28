@@ -153,10 +153,8 @@ bool check_for_burnout() {
 	else if (__rocket_vertical_accel_history == nullptr)
 		return false;
 
-	float accel_avg = __rocket_vertical_accel_history->mean();
 	if (__rocket_vertical_accel_history->at_capacity() &&
-			approx(accel_avg, __rocket_burnout_acceleration,
-					__rocket_burnout_detection_negligence))
+	 		__rocket_vertical_accel_history->mean() < 0)
 		__flight_event_burnout = true;
 
 	return __flight_event_burnout;
