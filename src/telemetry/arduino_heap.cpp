@@ -7,7 +7,7 @@ bool ArduinoHeapIO::write(int addr, byte b) {
 	EEPROM.write(addr, b);
 	return true;
 #else
-	return false
+	return false;
 #endif
 }
 
