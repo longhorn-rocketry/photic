@@ -32,16 +32,16 @@ Interfacing your sensors with Photonic is as simple as overriding the `initializ
 
 ```cpp
 Imu *imu = new YourCustomImuWrapper(); // our IMU is highly specialized
-Barometer *baro = new BMP085Barometer(); // we do, however, use the BMP085
+Barometer *barometer = new BMP085Barometer(); // we do, however, use the BMP085
 
 imu->initialize();
-baro->initialize();
+barometer->initialize();
 
 photonic_configure(ROCKET_PRIMARY_IMU, imu);
-photonic_configure(ROCKET_PRIMARY_BAROMETER, baro);
+photonic_configure(ROCKET_PRIMARY_BAROMETER, barometer);
 ```
 
-With setup complete, the computer should delay until liftoff.
+With setup complete, the computer should delay until liftoff, which it can now detect based on your configuration.
 
 ```cpp
 wait_for_liftoff();
@@ -53,10 +53,9 @@ Once we're in the air, we'll want to record telemetry...
 TelemetryHeap heap; // memory IO is understood inherently based on ROCKET_MICROCONTROLLER
 int altitude_data_id = heap.add_block(1024); // block with 1 kB of storage
 
-baro->update();
-// logc = log compressed; floats get converted to short floats for double the
-// storage density!
-heap.logc(altitude_data_id, baro->get_altitude());
+barometer->update();
+// logc = log compressed; float32 -> float16 for twice the storage density!
+heap.logc(altitude_data_id, barometer->get_altitude());
 ```
 
 ...and after recovery, we'll need to retrieve it.
