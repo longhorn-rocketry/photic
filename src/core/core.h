@@ -28,6 +28,8 @@ enum config {
 
 	ROCKET_MICROCONTROLLER,
 
+	ROCKET_BURNOUT_DETECTION_METHOD,
+
 	ROCKET_APOGEE_DETECTION_METHOD
 };
 
@@ -49,6 +51,11 @@ enum microcontroller_model {
 	TEENSYPP_10,
 	TEENSY_10,
 	NONE
+};
+
+enum burnout_detection_method {
+	APPROX_BURNOUT_ACCEL,
+	NEGATIVE_AVG_ACCEL
 };
 
 enum apogee_detection_method {
@@ -81,6 +88,8 @@ extern history<float> *__rocket_vertical_velocity_history;
 extern axis __rocket_vertical_imu_axis;
 
 extern microcontroller_model __rocket_microcontroller;
+
+extern burnout_detection_method __rocket_burnout_detection_method;
 
 extern apogee_detection_method __rocket_apogee_detection_method;
 
@@ -128,6 +137,11 @@ void photonic_configure(config c, microcontroller_model m);
 	@brief configuration for apogee detection method
 */
 void photonic_configure(config c, apogee_detection_method a);
+
+/**
+	@brief configuration for burnout detection method
+*/
+void photonic_configure(config c, burnout_detection_method b);
 
 /**
 	@brief blocks program flow until the IMU reads a sustained acceleration over

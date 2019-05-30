@@ -34,6 +34,9 @@ microcontroller_model __rocket_microcontroller = NONE;
 apogee_detection_method __rocket_apogee_detection_method =
 		APPROX_FREEFALL_ACCEL;
 
+burnout_detection_method __rocket_burnout_detection_method =
+		NEGATIVE_AVG_ACCEL;
+
 void photonic_init() {
 	__photonic_has_initialized = true;
 
@@ -120,6 +123,14 @@ void photonic_configure(config c, apogee_detection_method a) {
 		__rocket_apogee_detection_method = a;
 }
 
+void photonic_configure(config c, burnout_detection_method a) {
+	if (!__photonic_has_initialized)
+		photonic_init();
+
+	if (c == ROCKET_BURNOUT_DETECTION_METHOD)
+		__rocket_burnout_detection_method = a;
+}
+
 void wait_for_liftoff() {
 	if (!__photonic_has_initialized || __rocket_primary_imu == nullptr ||
 			__rocket_timekeeper == nullptr)
@@ -164,9 +175,18 @@ bool check_for_burnout() {
 	else if (__rocket_vertical_accel_history == nullptr)
 		return false;
 
-	if (__rocket_vertical_accel_history->at_capacity() &&
-	 		__rocket_vertical_accel_history->mean() < 0)
-		__flight_event_burnout = true;
+	if (__rocket_burnout_detection_method == NEGATIVE_AVG_ACCEL) {
+		if (__rocket_vertical_accel_history->at_capacity() &&
+		 		__rocket_vertical_accel_history->mean() < 0)
+			__flight_event_burnout = true;
+	} else if (__rocket_burnout_detection_method == APPROX_BURNOUT_ACCEL) {
+		if (__rocket_vertical_accel_history->at_capacity() &&
+				approx(__rocket_vertical_accel_history->mean(),
+						__rocket_burnout_acceleration,
+						__rocket_burnout_detection_negligence))
+			__flight_event_burnout = true;
+	}
+
 
 	return __flight_event_burnout;
 }
@@ -174,8 +194,6 @@ bool check_for_burnout() {
 bool check_for_apogee() {
 	if (__flight_event_apogee)
 		return true;
-	else if (__rocket_vertical_velocity_history == nullptr)
-		return false;
 
 	if (__rocket_apogee_detection_method == APPROX_ZERO_VELOCITY) {
 		float velocity_avg = __rocket_vertical_velocity_history->mean();
