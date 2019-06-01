@@ -27,6 +27,7 @@ Barometer *__rocket_primary_barometer = nullptr;
 Timekeeper *__rocket_timekeeper = nullptr;
 history<float> *__rocket_vertical_accel_history = nullptr;
 history<float> *__rocket_vertical_velocity_history = nullptr;
+TelemetryHeap *__rocket_telemetry_heap = nullptr;
 
 axis __rocket_vertical_imu_axis = Z;
 
@@ -100,6 +101,11 @@ void photonic_configure(config c, void *ptr) {
 		__rocket_vertical_accel_history = (history<float>*)ptr;
 	else if (c == ROCKET_VERTICAL_VELOCITY_HISTORY)
 		__rocket_vertical_velocity_history = (history<float>*)ptr;
+	else if (c == ROCKET_TELEMETRY_HEAP) {
+		__rocket_telemetry_heap = (TelemetryHeap*)ptr;
+		if (__rocket_telemetry_heap != nullptr)
+			__rocket_telemetry_heap->auto_configure();
+	}
 }
 
 void photonic_configure(config c, axis a) {

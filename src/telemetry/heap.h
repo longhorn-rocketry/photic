@@ -9,6 +9,7 @@ namespace photonic
 {
 
 typedef unsigned char byte;
+typedef unsigned int uint;
 
 /**
 	All valid telemetry data types. Used by TelemetryHeap for type
@@ -60,7 +61,7 @@ public:
 class HeapBlock {
 protected:
 	HeapIO *io;
-	int addr_start, addr_end, index;
+	unsigned int addr_start, addr_end, index;
 
 public:
 	/**
@@ -70,19 +71,19 @@ public:
 		@param addr_end block end address
 		@param io memory handler
 	*/
-	HeapBlock(int addr_start, int addr_end, HeapIO *io);
+	HeapBlock(unsigned int addr_start, unsigned int addr_end, HeapIO *io);
 
 	/**
 		@brief writes byte b to address addr; addr should be on [this->addr_start,
 			     this->addr_end)
 	*/
-	bool write(int addr, byte b);
+	bool write(unsigned int addr, byte b);
 
 	/**
 		@brief reads byte from address addr; addr should be on [this->addr_start,
 			     this->addr_end)
 	*/
-	byte read(int addr);
+	byte read(unsigned int addr);
 
 	/**
 		@brief pushes byte b on top of the last pushed byte as though the block
@@ -118,8 +119,12 @@ public:
 class TelemetryHeap {
 protected:
 	HeapIO *io;
-	int addr_start, addr_end;
+	unsigned int addr_start, addr_end;
 	std::vector<HeapBlock*> blocks;
+
+	bool bad_block_id(unsigned int id);
+
+	bool bad_heap();
 
 public:
 	/**
@@ -129,7 +134,7 @@ public:
 		@param addr_end largest heap address
 		@param io memory handler
 	*/
-	TelemetryHeap(int addr_start, int addr_end, HeapIO *io);
+	TelemetryHeap(unsigned int addr_start, unsigned int addr_end, HeapIO *io);
 
 	/**
 		Automatically configures the heap based on microcontroller model specified
@@ -144,18 +149,24 @@ public:
 	~TelemetryHeap();
 
 	/**
+		@brief automatically configures the heap based on the microcontroller
+		       specified through photonic_configure
+	*/
+	void auto_configure();
+
+	/**
 		Defines a region of the heap as a new block, and return its ID.
 
 		@param addr_start block start address
 		@param addr_end block end address
 		@return block ID
 	*/
-	int add_block(int addr_start, int addr_end);
+	unsigned int add_block(unsigned int addr_start, unsigned int addr_end);
 
 	/**
 		@brief adds a new block immediately after the previous block
 	*/
-	int add_block(int size);
+	unsigned int add_block(unsigned int size);
 
 	/**
 		Retrieves all data stored within a block. Client is responsible for type
@@ -166,68 +177,68 @@ public:
 		@param block_id block ID
 		@return pointer to array of retrieved data
 	*/
-	void* read_block(int block_id);
+	void* read_block(unsigned int block_id);
 
 	/**
 		@brief retrieves data stored within a memory range
 	*/
-	void* read_block(int addr_start, int addr_end);
+	void* read_block(unsigned int addr_start, unsigned int addr_end);
 
 	/**
 		@brief decompresses a block of short floats into native floats
 	*/
-	float* decompress(int block_id);
+	float* decompress(unsigned int block_id);
 
 	/**
 		@brief retrieves compressed floats stored within a memory range
 	*/
-	float* decompress(int addr_start, int addr_end);
+	float* decompress(unsigned int addr_start, unsigned int addr_end);
 
 	/**
 		@brief pushes a byte onto a block and returns if the operation succeeded
 	*/
-	bool log(int block_id, byte b);
+	bool log(unsigned int block_id, byte b);
 
 	/**
 		@brief pushes a short onto a block and returns if the operation succeeded
 	*/
-	bool log(int block_id, short s);
+	bool log(unsigned int block_id, short s);
 
 	/**
 		@brief pushes an int onto a block and returns if the operation succeeded
 	*/
-	bool log(int block_id, int i);
+	bool log(unsigned int block_id, int i);
 
 	/**
 		@brief pushes a long onto a block and returns if the operation succeeded
 	*/
-	bool log(int block_id, long long l);
+	bool log(unsigned int block_id, long long l);
 
 	/**
 		@brief pushes a float16 onto a block and returns if the operation succeeded
 	*/
-	bool log(int block_id, float16 f16);
+	bool log(unsigned int block_id, float16 f16);
 
 	/**
 		@brief pushes a float onto a block and returns if the operation succeeded
 	*/
-	bool log(int block_id, float f);
+	bool log(unsigned int block_id, float f);
 
 	/**
 		@brief pushes a double onto a block and returns if the operation succeeded
 	*/
-	bool log(int block_id, double d);
+	bool log(unsigned int block_id, double d);
 
 	/**
 		@brief compresses a float into a float16 and pushes it onto a block and
 		       returns if the operation succeeded
 	*/
-	bool logc(int block_id, float f);
+	bool logc(unsigned int block_id, float f);
 
 	/**
 		@briefs gets the size of a block in bytes
 	*/
-	unsigned int get_block_size(int block_id);
+	unsigned int get_block_size(unsigned int block_id);
 };
 
 }; // end namespace photonic
