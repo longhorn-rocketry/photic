@@ -169,9 +169,19 @@ public:
 	void* read_block(int block_id);
 
 	/**
+		@brief retrieves data stored within a memory range
+	*/
+	void* read_block(int addr_start, int addr_end);
+
+	/**
 		@brief decompresses a block of short floats into native floats
 	*/
 	float* decompress(int block_id);
+
+	/**
+		@brief retrieves compressed floats stored within a memory range
+	*/
+	float* decompress(int addr_start, int addr_end);
 
 	/**
 		@brief pushes a byte onto a block and returns if the operation succeeded

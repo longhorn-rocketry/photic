@@ -152,6 +152,13 @@ void* TelemetryHeap::read_block(int block_id) {
 	return (void*)arr;
 }
 
+void* TelemetryHeap::read_block(int addr_start, int addr_end) {
+	byte *arr = new byte[addr_end - addr_start];
+	for (int i = addr_start; i < addr_end; i++)
+		arr[i - addr_start] = io->read(i);
+	return (void*)arr;
+}
+
 float* TelemetryHeap::decompress(int block_id) {
 	HeapBlock *block = blocks[block_id];
  	unsigned int block_start = block->get_start(), block_end = block->get_end();
@@ -161,6 +168,17 @@ float* TelemetryHeap::decompress(int block_id) {
 		float16 f16 = (b1 << 8) | b0;
 		float f = Float16Compressor::decompress(f16);
 		arr[i / 2 - block_start] = f;
+	}
+	return arr;
+}
+
+float* TelemetryHeap::decompress(int addr_start, int addr_end) {
+	float *arr = new float[(addr_end - addr_start) / 2];
+	for (int i = addr_start; i < addr_end; i += 2) {
+		byte b1 = io->read(i), b0 = io->read(i + 1);
+		float16 f16 = (b1 << 8) | b0;
+		float f = Float16Compressor::decompress(f16);
+		arr[i / 2 - addr_start] = f;
 	}
 	return arr;
 }
