@@ -18,6 +18,7 @@ float __rocket_burnout_detection_negligence = 0.25;
 float __rocket_apogee_detection_negligence = 0.25;
 float __rocket_burnout_acceleration = -1;
 float __rocket_apogee_velocity = 0;
+float __rocket_automatic_burnout = -1;
 
 int __rocket_wait_for_liftoff_ma_size = 10;
 
@@ -73,6 +74,8 @@ void photonic_configure(config c, float f) {
 		__rocket_burnout_acceleration = f;
 	else if (c == ROCKET_APOGEE_VELOCITY)
 		__rocket_apogee_velocity = f;
+	else if (c == ROCKET_AUTOMATIC_BURNOUT)
+		__rocket_automatic_burnout = f;
 }
 
 void photonic_configure(config c, int i) {
@@ -132,7 +135,8 @@ void photonic_configure(config c, burnout_detection_method a) {
 }
 
 void wait_for_liftoff() {
-	if (!__photonic_has_initialized || __rocket_primary_imu == nullptr ||
+	if (!__photonic_has_initialized ||
+		  __rocket_primary_imu == nullptr ||
 			__rocket_timekeeper == nullptr)
 		return;
 
@@ -142,8 +146,8 @@ void wait_for_liftoff() {
 	int readings = 0;
 
 	while (readings < __rocket_wait_for_liftoff_ma_size ||
-			fabs(accel_avg) < __rocket_ignition_g_trigger ||
-			__rocket_timekeeper->time() - time_start <= __rocket_no_ignition_grace_period) {
+			   fabs(accel_avg) < __rocket_ignition_g_trigger ||
+			   __rocket_timekeeper->time() - time_start <= __rocket_no_ignition_grace_period) {
 		// Add new accel value
 		float accel = 0;
 		switch (__rocket_vertical_imu_axis) {
@@ -182,11 +186,14 @@ bool check_for_burnout() {
 	} else if (__rocket_burnout_detection_method == APPROX_BURNOUT_ACCEL) {
 		if (__rocket_vertical_accel_history->at_capacity() &&
 				approx(__rocket_vertical_accel_history->mean(),
-						__rocket_burnout_acceleration,
-						__rocket_burnout_detection_negligence))
+						   __rocket_burnout_acceleration,
+						   __rocket_burnout_detection_negligence))
 			__flight_event_burnout = true;
 	}
 
+	if (__rocket_automatic_burnout != -1 &&
+		  flight_time() > __rocket_automatic_burnout)
+		__flight_event_burnout = true;
 
 	return __flight_event_burnout;
 }
@@ -198,13 +205,16 @@ bool check_for_apogee() {
 	if (__rocket_apogee_detection_method == APPROX_ZERO_VELOCITY) {
 		float velocity_avg = __rocket_vertical_velocity_history->mean();
 		if (__rocket_vertical_velocity_history->at_capacity() &&
-				approx(velocity_avg, __rocket_apogee_velocity,
-						__rocket_apogee_detection_negligence))
+				approx(velocity_avg,
+					     __rocket_apogee_velocity,
+						   __rocket_apogee_detection_negligence))
 			__flight_event_apogee = true;
 	} else if (__rocket_apogee_detection_method == APPROX_FREEFALL_ACCEL) {
 		float accel_avg = __rocket_vertical_accel_history->mean();
 		if (__rocket_vertical_accel_history->at_capacity() &&
-				approx(accel_avg, -1, __rocket_apogee_detection_negligence))
+				approx(accel_avg,
+					     -1,
+							 __rocket_apogee_detection_negligence))
 			__flight_event_apogee = true;
 	}
 
