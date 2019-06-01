@@ -153,6 +153,11 @@ public:
 	int add_block(int addr_start, int addr_end);
 
 	/**
+		@brief adds a new block immediately after the previous block
+	*/
+	int add_block(int size);
+
+	/**
 		Retrieves all data stored within a block. Client is responsible for type
 		interpretation and deallocation of the generated array. Array will be of
 		length get_block_size(block_id) bytes, and contain

@@ -134,6 +134,15 @@ int TelemetryHeap::add_block(int addr_start, int addr_end) {
 	return blocks.size() - 1;
 }
 
+int TelemetryHeap::add_block(int size) {
+	if (io == nullptr)
+		return -1;
+
+	int addr_last = blocks.size() == 0 ? 0 : blocks[blocks.size() - 1]->get_end();
+	blocks.push_back(new HeapBlock(addr_last, addr_last + size, io));
+	return blocks.size() - 1;
+}
+
 void* TelemetryHeap::read_block(int block_id) {
 	HeapBlock *block = blocks[block_id];
  	unsigned int block_start = block->get_start(), block_end = block->get_end();
