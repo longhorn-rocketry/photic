@@ -2,6 +2,7 @@
 #define PHOTONIC_H
 
 #include "core/core.h"
+#include "core/metronome.h"
 
 #include "math/rocket_math.h"
 
