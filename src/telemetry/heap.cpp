@@ -192,7 +192,7 @@ float* TelemetryHeap::decompress(unsigned int block_id) {
 		byte b1 = block->read(i), b0 = block->read(i + 1);
 		float16 f16 = (b1 << 8) | b0;
 		float f = Float16Compressor::decompress(f16);
-		arr[i / 2 - block_start] = f;
+		arr[(i - block_start) / 2] = f;
 	}
 	return arr;
 }
@@ -207,7 +207,7 @@ float* TelemetryHeap::decompress(unsigned int addr_start,
 		byte b1 = io->read(i), b0 = io->read(i + 1);
 		float16 f16 = (b1 << 8) | b0;
 		float f = Float16Compressor::decompress(f16);
-		arr[i / 2 - addr_start] = f;
+		arr[(i - addr_start) / 2] = f;
 	}
 	return arr;
 }
