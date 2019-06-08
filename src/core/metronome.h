@@ -8,7 +8,7 @@ namespace photonic {
 */
 class Metronome {
 protected:
-  float frequency, t_last;
+  float frequency, wavelength, t_last, dt;
 
 public:
   /**
@@ -25,6 +25,20 @@ public:
     @param t current time in seconds
   */
   bool poll(float t);
+
+  /**
+    Gets the wavelength (1 / f) of the metronome.
+
+    @return wavelength
+  */
+  float get_wavelength();
+
+  /**
+    Gets the delta t of the last poll call.
+
+    @return dt
+  */
+  float get_dt();
 };
 
 }; // end namespace photonic
