@@ -1,4 +1,4 @@
-#include "math/matrix.h"
+#include "matrix.h"
 
 const matrix NULLMAT(0, 0);
 
@@ -35,16 +35,6 @@ int Matrix::rows() const {
 
 int Matrix::cols() const {
   return _cols;
-}
-
-std::ostream& operator<<(std::ostream &stream, const Matrix &mat) {
-  for (int r = 0; r < mat._rows; r++) {
-    for (int c = 0; c < mat._cols; c++) {
-      stream << mat.get(r, c) << " ";
-    }
-    stream << "\n";
-  }
-  return stream;
 }
 
 float* Matrix::operator[](int i) {

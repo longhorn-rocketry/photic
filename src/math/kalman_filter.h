@@ -1,7 +1,7 @@
 #ifndef PHOTONIC_MATH_KALMAN_FILTER_H
 #define PHOTONIC_MATH_KALMAN_FILTER_H
 
-#include "math/matrix.h"
+#include "matrix.h"
 
 /**
   Kalman filter with an [altitude, acceleration] observation model as is common

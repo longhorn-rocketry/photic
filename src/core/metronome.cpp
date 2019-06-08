@@ -1,4 +1,4 @@
-#include "core/metronome.h"
+#include "metronome.h"
 
 using namespace photonic;
 

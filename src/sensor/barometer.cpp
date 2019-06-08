@@ -1,4 +1,4 @@
-#include "sensor/barometer.h"
+#include "barometer.h"
 
 using namespace photonic;
 

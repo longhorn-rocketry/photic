@@ -1,4 +1,4 @@
-#include "math/rocket_math.h"
+#include "rocket_math.h"
 
 namespace photonic {
 

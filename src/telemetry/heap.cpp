@@ -1,6 +1,6 @@
-#include "core/core.h"
-#include "telemetry/arduino_heap.h"
-#include "telemetry/heap.h"
+#include "../core/core.h"
+#include "arduino_heap.h"
+#include "heap.h"
 
 using namespace photonic;
 

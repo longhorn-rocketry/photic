@@ -1,8 +1,6 @@
 #ifndef PHOTONIC_MATH_MATRIX_H
 #define PHOTONIC_MATH_MATRIX_H
 
-#include <iostream>
-
 /**
   A lightweight matrix implementation designed for speed. The internal storage
   is of static size MATRIX_STATIC_SIZE, which can be increased as needed. We
@@ -62,12 +60,6 @@ public:
     @brief gets the column count
   */
   int cols() const;
-
-  /**
-    @brief allows inserting into streams; purely for debug and doesn't compute
-           ASCII column widths
-  */
-  friend std::ostream& operator<<(std::ostream &stream, const Matrix &mat);
 
   /**
     @brief allows matrix set and get with bracket indexing

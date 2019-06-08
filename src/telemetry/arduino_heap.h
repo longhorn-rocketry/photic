@@ -1,7 +1,7 @@
 #ifndef PHOTONIC_TELEMETRY_ARDUINO_HEAP_H
 #define PHOTONIC_TELEMETRY_ARDUINO_HEAP_H
 
-#include "telemetry/heap.h"
+#include "heap.h"
 
 #ifdef ARDUINO
 	#include <EEPROM.h>

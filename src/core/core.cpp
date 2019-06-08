@@ -1,5 +1,5 @@
-#include "core/core.h"
-#include "math/rocket_math.h"
+#include "core.h"
+#include "../math/rocket_math.h"
 
 #include <math.h>
 
@@ -155,6 +155,7 @@ void wait_for_liftoff() {
 			   fabs(accel_avg) < __rocket_ignition_g_trigger ||
 			   __rocket_timekeeper->time() - time_start <= __rocket_no_ignition_grace_period) {
 		// Add new accel value
+		__rocket_primary_imu->update();
 		float accel = 0;
 		switch (__rocket_vertical_imu_axis) {
 			case X:
@@ -167,7 +168,8 @@ void wait_for_liftoff() {
 				accel = __rocket_primary_imu->get_acc_z();
 				break;
 		}
-		accels[readings++ % __rocket_wait_for_liftoff_ma_size] = accel;
+		accels[readings % __rocket_wait_for_liftoff_ma_size] = accel;
+		readings++;
 
 		// Find avg accel
 		float accel_total = 0;

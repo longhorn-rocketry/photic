@@ -1,4 +1,4 @@
-#include "sensor/BMP085_barometer.h"
+#include "BMP085_barometer.h"
 
 using namespace photonic;
 

@@ -1,11 +1,11 @@
 #ifndef PHOTONIC_CORE_H
 #define PHOTONIC_CORE_H
 
-#include "core/timekeeping.h"
-#include "sensor/barometer.h"
-#include "sensor/imu.h"
-#include "telemetry/heap.h"
-#include "telemetry/history.h"
+#include "timekeeping.h"
+#include "../sensor/barometer.h"
+#include "../sensor/imu.h"
+#include "../telemetry/heap.h"
+#include "../telemetry/history.h"
 
 namespace photonic {
 

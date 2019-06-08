@@ -4,7 +4,7 @@
 #ifdef ARDUINO
 	#include "Adafruit_BMP085.h"
 #endif
-#include "sensor/barometer.h"
+#include "barometer.h"
 
 namespace photonic {
 

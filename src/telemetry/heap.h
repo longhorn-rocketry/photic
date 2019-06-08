@@ -1,7 +1,7 @@
 #ifndef PHOTONIC_TELEMETRY_HEAP_H
 #define PHOTONIC_TELEMETRY_HEAP_H
 
-#include "telemetry/float16.h"
+#include "float16.h"
 
 #include <vector>
 

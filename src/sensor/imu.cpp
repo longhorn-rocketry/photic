@@ -1,4 +1,4 @@
-#include "sensor/imu.h"
+#include "imu.h"
 
 using namespace photonic;
 

@@ -1,6 +1,8 @@
-#include "core/timekeeping.h"
+#include "timekeeping.h"
 
-#include <Arduino.h>
+#ifdef ARDUINO
+	#include <Arduino.h>
+#endif
 
 using namespace photonic;
 
