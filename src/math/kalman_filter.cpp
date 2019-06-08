@@ -1,5 +1,7 @@
 #include "kalman_filter.h"
 
+using namespace photonic;
+
 KalmanFilter::KalmanFilter() {
   A = matrix(3, 3,
       1, 0, 0,

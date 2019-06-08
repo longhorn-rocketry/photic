@@ -3,6 +3,8 @@
 
 #include "matrix.h"
 
+namespace photonic {
+
 /**
   Kalman filter with an [altitude, acceleration] observation model as is common
   in rocketry.
@@ -82,5 +84,7 @@ public:
   */
   matrix filter(float s, float a);
 };
+
+}; // end namespace photonic
 
 #endif
