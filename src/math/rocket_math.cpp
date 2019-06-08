@@ -6,4 +6,8 @@ bool approx(float a, float b, float negligence) {
 	return fabs(a - b) <= negligence;
 }
 
+float hypso(float p0, float p, float t) {
+  return (pow((p0 / p), 1 / 5.257) - 1) * (t + 273.15) / 0.0065;
+}
+
 }; // end namespace photonic

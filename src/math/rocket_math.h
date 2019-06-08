@@ -15,6 +15,16 @@ namespace photonic {
 */
 bool approx(float a, float b, float negligence);
 
+/**
+  The Hypsometric formula; used to compute GL altitude when under 11 km.
+
+  @param p0 initial pressure, likely on launchpad (kP)
+  @param p current pressure (kP)
+  @param t current temperature (C)
+  @return approximate current GL altitude
+*/
+float hypso(float p0, float p, float t);
+
 }; // end namespace photonic
 
 #endif
