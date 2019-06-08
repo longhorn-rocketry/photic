@@ -4,6 +4,8 @@
 #include "core/core.h"
 #include "core/metronome.h"
 
+#include "math/kalman_filter.h"
+#include "math/matrix.h"
 #include "math/rocket_math.h"
 
 #include "sensor/imu.h"
