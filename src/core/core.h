@@ -114,14 +114,9 @@ float rocket_time();
 float flight_time();
 
 /**
-	@brief configuration for global float parameters
+	@brief configuration for global numeric parameters
 */
-void photonic_configure(config c, float f);
-
-/**
-	@brief configuration for global int parameters
-*/
-void photonic_configure(config c, int i);
+void photonic_configure(config c, double d);
 
 /**
 	@brief configuration for global pointer parameters

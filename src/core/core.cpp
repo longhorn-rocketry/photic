@@ -40,6 +40,9 @@ burnout_detection_method __rocket_burnout_detection_method =
 		NEGATIVE_AVG_ACCEL;
 
 void photonic_init() {
+	if (__rocket_timekeeper == nullptr)
+		return;
+
 	__photonic_has_initialized = true;
 
 	// If the client is running Arduino, we know what timekeeper to use
@@ -59,32 +62,26 @@ float flight_time() {
 			__rocket_ignition_time;
 }
 
-void photonic_configure(config c, float f) {
-	if (!__photonic_has_initialized)
-		photonic_init();
-
-	if (c == ROCKET_IGNITION_G_TRIGGER)
-		__rocket_ignition_g_trigger = f;
-	else if (c == ROCKET_NO_IGNITION_GRACE_PERIOD)
-		__rocket_no_ignition_grace_period = f;
-	else if (c == ROCKET_BURNOUT_DETECTION_NEGLIGENCE)
-		__rocket_burnout_detection_negligence = f;
-	else if (c == ROCKET_APOGEE_DETECTION_NEGLIGENCE)
-		__rocket_apogee_detection_negligence = f;
-	else if (c == ROCKET_BURNOUT_ACCELERATION)
-		__rocket_burnout_acceleration = f;
-	else if (c == ROCKET_APOGEE_VELOCITY)
-		__rocket_apogee_velocity = f;
-	else if (c == ROCKET_AUTOMATIC_BURNOUT)
-		__rocket_automatic_burnout = f;
-}
-
-void photonic_configure(config c, int i) {
+void photonic_configure(config c, double d) {
 	if (!__photonic_has_initialized)
 		photonic_init();
 
 	if (c == ROCKET_WAIT_FOR_LIFTOFF_MA_SIZE)
-		__rocket_wait_for_liftoff_ma_size = i;
+		__rocket_wait_for_liftoff_ma_size = d;
+	else if (c == ROCKET_IGNITION_G_TRIGGER)
+		__rocket_ignition_g_trigger = d;
+	else if (c == ROCKET_NO_IGNITION_GRACE_PERIOD)
+		__rocket_no_ignition_grace_period = d;
+	else if (c == ROCKET_BURNOUT_DETECTION_NEGLIGENCE)
+		__rocket_burnout_detection_negligence = d;
+	else if (c == ROCKET_APOGEE_DETECTION_NEGLIGENCE)
+		__rocket_apogee_detection_negligence = d;
+	else if (c == ROCKET_BURNOUT_ACCELERATION)
+		__rocket_burnout_acceleration = d;
+	else if (c == ROCKET_APOGEE_VELOCITY)
+		__rocket_apogee_velocity = d;
+	else if (c == ROCKET_AUTOMATIC_BURNOUT)
+		__rocket_automatic_burnout = d;
 }
 
 void photonic_configure(config c, void *ptr) {
@@ -174,7 +171,7 @@ void wait_for_liftoff() {
 		// Find avg accel
 		float accel_total = 0;
 		for (int i = 0; i < __rocket_wait_for_liftoff_ma_size; i++)
-			accel_total += accels[__rocket_wait_for_liftoff_ma_size];
+			accel_total += accels[i];
 		accel_avg = accel_total / __rocket_wait_for_liftoff_ma_size;
 	}
 
