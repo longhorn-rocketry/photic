@@ -27,9 +27,10 @@ public:
 	virtual ~Imu() = default;
 
 	/**
-		@brief setup function, usually a handshake over I2C or serial
+		@brief setup function, usually a handshake over I2C or serial; returns if
+		       initialization succeeded
 	*/
-	virtual void initialize() = 0;
+	virtual bool initialize() = 0;
 
 	/**
 		@brief updates all sensor readings within the internal ImuData struct

@@ -2,9 +2,9 @@
 
 using namespace photonic;
 
-void BMP085Barometer::initialize() {
+bool BMP085Barometer::initialize() {
 #ifdef ADAFRUIT_BMP085_H
-	while (!baro.begin());
+	return baro.begin();
 #endif
 }
 

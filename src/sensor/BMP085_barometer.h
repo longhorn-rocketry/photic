@@ -21,7 +21,7 @@ public:
 	/**
 		@brief connect with BMP085
 	*/
-	void initialize();
+	bool initialize();
 
 	/**
 		@brief updates all sensor readings within the internal BarometerData struct

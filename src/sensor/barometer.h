@@ -24,9 +24,10 @@ public:
 	virtual ~Barometer() = default;
 
 	/**
-		@brief setup function, usually a handshake over I2C or serial
+		@brief setup function, usually a handshake over I2C or serial; should return
+		       if initialization succeeded
 	*/
-	virtual void initialize() = 0;
+	virtual bool initialize() = 0;
 
 	/**
 		@brief updates all sensor readings within the internal BarometerData struct
