@@ -25,6 +25,15 @@ bool approx(float a, float b, float negligence);
 */
 float hypso(float p0, float p, float t);
 
+/**
+  Computes the density of an ideal gas according to the Ideal Gas Law.
+
+  @param p pressure (pascals)
+  @param t temperature (kelvin)
+  @return density (moles / m^3)
+*/
+float igl_density(float p, float t);
+
 }; // end namespace photonic
 
 #endif
