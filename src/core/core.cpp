@@ -179,6 +179,7 @@ void wait_for_liftoff() {
 	}
 
 	__rocket_ignition_time = __rocket_timekeeper->time();
+	delete accels;
 }
 
 bool check_for_burnout() {
