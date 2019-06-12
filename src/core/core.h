@@ -25,6 +25,7 @@ enum config {
 	ROCKET_TIMEKEEPER,
 	ROCKET_VERTICAL_ACCEL_HISTORY,
 	ROCKET_VERTICAL_VELOCITY_HISTORY,
+	ROCKET_ALTITUDE_HISTORY,
 	ROCKET_TELEMETRY_HEAP,
 
 	ROCKET_VERTICAL_IMU_AXIS,
@@ -63,12 +64,16 @@ enum burnout_detection_method {
 
 enum apogee_detection_method {
 	APPROX_ZERO_VELOCITY,
+	NEGATIVE_AVG_VELOCITY,
 	APPROX_FREEFALL_ACCEL
 };
 
 extern bool __photonic_has_initialized;
+
 extern float __photonic_epoch_time;
 extern float __rocket_ignition_time;
+extern float __rocket_burnout_time;
+extern float __rocket_apogee_time;
 
 extern bool __flight_event_burnout;
 extern bool __flight_event_apogee;
@@ -88,6 +93,7 @@ extern Barometer *__rocket_primary_barometer;
 extern Timekeeper *__rocket_timekeeper;
 extern history<float> *__rocket_vertical_accel_history;
 extern history<float> *__rocket_vertical_velocity_history;
+extern history<float> *__rocket_altitude_history;
 extern TelemetryHeap *__rocket_telemetry_heap;
 
 extern axis __rocket_vertical_imu_axis;

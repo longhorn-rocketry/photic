@@ -6,8 +6,11 @@
 namespace photonic {
 
 bool __photonic_has_initialized = false;
+
 float __photonic_epoch_time = -1;
 float __rocket_ignition_time = -1;
+float __rocket_burnout_time = -1;
+float __rocket_apogee_time = -1;
 
 bool __flight_event_burnout = false;
 bool __flight_event_apogee = false;
@@ -40,9 +43,6 @@ burnout_detection_method __rocket_burnout_detection_method =
 		NEGATIVE_AVG_ACCEL;
 
 void photonic_init() {
-	if (__rocket_timekeeper == nullptr)
-		return;
-
 	__photonic_has_initialized = true;
 
 	// If the client is running Arduino, we know what timekeeper to use
@@ -50,7 +50,8 @@ void photonic_init() {
 	photonic_configure(ROCKET_TIMEKEEPER, new ArduinoTimekeeper());
 #endif
 
-	__photonic_epoch_time = __rocket_timekeeper->time();
+	if (__rocket_timekeeper != nullptr)
+		__photonic_epoch_time = __rocket_timekeeper->time();
 }
 
 float rocket_time() {
@@ -201,6 +202,9 @@ bool check_for_burnout() {
 		  flight_time() > __rocket_automatic_burnout)
 		__flight_event_burnout = true;
 
+	if (__flight_event_burnout)
+		__rocket_burnout_time = flight_time();
+
 	return __flight_event_burnout;
 }
 
@@ -222,7 +226,15 @@ bool check_for_apogee() {
 					     -1,
 							 __rocket_apogee_detection_negligence))
 			__flight_event_apogee = true;
+	} else if (__rocket_apogee_detection_method == NEGATIVE_AVG_VELOCITY) {
+		float velocity_avg = __rocket_vertical_velocity_history->mean();
+		if (__rocket_vertical_velocity_history->at_capacity() &&
+		    velocity_avg < 0)
+				__flight_event_apogee = true;
 	}
+
+	if (__flight_event_apogee)
+		__rocket_apogee_time = flight_time();
 
 	return __flight_event_apogee;
 }

@@ -13,6 +13,7 @@ namespace photonic {
 */
 class BMP085Barometer : public Barometer {
 protected:
+	bool initialized;
 #ifdef ADAFRUIT_BMP085_H
 	Adafruit_BMP085 baro;
 #endif

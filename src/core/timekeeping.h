@@ -22,7 +22,7 @@ public:
 /**
 	Timekeeping via Arduino's millis()
 */
-class ArduinoTimekeeper {
+class ArduinoTimekeeper : public Timekeeper {
 public:
 	/**
 		@brief gets the current Arduino time in seconds
