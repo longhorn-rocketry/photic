@@ -93,10 +93,18 @@ public:
 	}
 
 	/**
-		@briefs gets whether or not the history is full
+		@brief gets whether or not the history is full
 	*/
 	bool at_capacity() {
 		return data.size() == size;
+	}
+
+	/**
+		@brief gets the number of items currently in the history (will be size if
+		       at_capacity())
+	*/
+	int get_index() {
+		return data.size();
 	}
 };
 
