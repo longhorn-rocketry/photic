@@ -22,6 +22,7 @@ float __rocket_apogee_detection_negligence = 0.25;
 float __rocket_burnout_acceleration = -1;
 float __rocket_apogee_velocity = 0;
 float __rocket_automatic_burnout = -1;
+float __rocket_automatic_apogee = -1;
 
 int __rocket_wait_for_liftoff_ma_size = 10;
 
@@ -83,6 +84,8 @@ void photonic_configure(config c, double d) {
 		__rocket_apogee_velocity = d;
 	else if (c == ROCKET_AUTOMATIC_BURNOUT)
 		__rocket_automatic_burnout = d;
+	else if (c == ROCKET_AUTOMATIC_APOGEE)
+		__rocket_automatic_apogee = d;
 }
 
 void photonic_configure(config c, void *ptr) {
@@ -232,6 +235,10 @@ bool check_for_apogee() {
 		    velocity_avg < 0)
 				__flight_event_apogee = true;
 	}
+
+	if (__rocket_automatic_apogee != -1 &&
+		  flight_time() > __rocket_automatic_apogee)
+		__flight_event_apogee = true;
 
 	if (__flight_event_apogee)
 		__rocket_apogee_time = flight_time();

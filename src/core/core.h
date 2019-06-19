@@ -17,6 +17,7 @@ enum config {
 	ROCKET_BURNOUT_ACCELERATION,
 	ROCKET_APOGEE_VELOCITY,
 	ROCKET_AUTOMATIC_BURNOUT,
+	ROCKET_AUTOMATIC_APOGEE,
 
 	ROCKET_WAIT_FOR_LIFTOFF_MA_SIZE,
 
@@ -85,6 +86,7 @@ extern float __rocket_apogee_detection_negligence;
 extern float __rocket_burnout_acceleration;
 extern float __rocket_apogee_velocity;
 extern float __rocket_automatic_burnout;
+extern float __rocket_automatic_apogee;
 
 extern int __rocket_wait_for_liftoff_ma_size;
 
