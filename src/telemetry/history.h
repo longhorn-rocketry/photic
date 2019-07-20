@@ -106,6 +106,13 @@ public:
 	int get_index() {
 		return data.size();
 	}
+
+  /**
+   * @brief clears the history
+   */
+  void clear() {
+    data.clear();
+  }
 };
 
 }; // end namespace photonic

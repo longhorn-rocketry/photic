@@ -89,9 +89,6 @@ void photonic_configure(config c, double d) {
 }
 
 void photonic_configure(config c, void *ptr) {
-	if (!__photonic_has_initialized)
-		photonic_init();
-
 	if (c == ROCKET_PRIMARY_IMU)
 		__rocket_primary_imu = (Imu*)ptr;
 	else if (c == ROCKET_PRIMARY_BAROMETER)
@@ -107,6 +104,9 @@ void photonic_configure(config c, void *ptr) {
 		if (__rocket_telemetry_heap != nullptr)
 			__rocket_telemetry_heap->auto_configure();
 	}
+
+  if (!__photonic_has_initialized)
+		photonic_init();
 }
 
 void photonic_configure(config c, axis a) {
