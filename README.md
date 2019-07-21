@@ -6,11 +6,9 @@ Rewriting entire computers (or even tweaking existing ones) from vehicle to vehi
 
 This library interfaces best with Arduino microcontrollers, but is abstract enough that it can be applied in any C++ stack.
 
-**Disclaimer: This library is a work-in-progress, and several components are pending flight testing.**
-
 ---
 
-### Launch Day is Tomorrow, We Have No Software and I'm Not Lars Blackmore; Send Help
+### Launch Day is Tomorrow, We Have No Software and I'm Not Lars Blackmore
 
 Import all of Photonic with a single line:
 
