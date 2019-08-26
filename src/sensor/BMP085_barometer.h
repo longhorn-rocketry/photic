@@ -1,35 +1,26 @@
-#ifndef PHOTONIC_LRA_BMP085_BAROMETER_H
-#define PHOTONIC_LRA_BMP085_BAROMETER_H
+#ifndef PHOTIC_BMP085_BAROMETER_H
+#define PHOTIC_BMP085_BAROMETER_H
 
 #ifdef ARDUINO
 	#include "Adafruit_BMP085.h"
 #endif
 #include "barometer.h"
 
-namespace photonic {
+namespace photic {
 
-/**
-	Photonic-friendly wrapper for the Adafruit BMP085
-*/
 class BMP085Barometer : public Barometer {
 protected:
-	bool initialized;
+	bool m_initialized;
 #ifdef ADAFRUIT_BMP085_H
-	Adafruit_BMP085 baro;
+	Adafruit_BMP085 m_baro;
 #endif
 
 public:
-	/**
-		@brief connect with BMP085
-	*/
 	bool initialize();
 
-	/**
-		@brief updates all sensor readings within the internal BarometerData struct
-	*/
 	void update();
 };
 
-}; // end namespace photonic
+} // end namespace photic
 
 #endif

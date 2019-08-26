@@ -1,21 +1,23 @@
 #include "BMP085_barometer.h"
 
-using namespace photonic;
+namespace photic {
 
 bool BMP085Barometer::initialize() {
-	initialized = false;
+	m_initialized = false;
 #ifdef ADAFRUIT_BMP085_H
-	initialized = baro.begin();
+	m_initialized = m_baro.begin();
 #endif
-	return initialized;
+	return m_initialized;
 }
 
 void BMP085Barometer::update() {
 #ifdef ADAFRUIT_BMP085_H
-	if (initialized) {
-		data.pressure = baro.readPressure();
-	  data.temperature = baro.readTemperature();
-	  data.altitude = baro.readAltitude(data.pressure);
+	if (m_initialized) {
+		m_data.pressure = m_baro.readPressure();
+	  m_data.temperature = m_baro.readTemperature();
+	  m_data.altitude = m_baro.readAltitude(m_data.pressure);
 	}
 #endif
 }
+
+} // end namespace photic

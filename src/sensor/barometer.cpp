@@ -1,21 +1,23 @@
 #include "barometer.h"
 
-using namespace photonic;
+namespace photic {
 
-void Barometer::read(BarometerData *dest) {
-	dest->pressure = data.pressure;
-	dest->altitude = data.altitude;
-	dest->temperature = data.temperature;
+void Barometer::read(BarometerData& k_dest) {
+	k_dest.pressure = m_data.pressure;
+	k_dest.altitude = m_data.altitude;
+	k_dest.temperature = m_data.temperature;
 }
 
 float Barometer::get_pressure() {
-	return data.pressure;
+	return m_data.pressure;
 }
 
 float Barometer::get_altitude() {
-	return data.altitude;
+	return m_data.altitude;
 }
 
 float Barometer::get_temperature() {
-	return data.temperature;
+	return m_data.temperature;
 }
+
+} // end namespace photic

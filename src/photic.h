@@ -1,5 +1,5 @@
-#ifndef PHOTONIC
-#define PHOTONIC
+#ifndef PHOTIC
+#define PHOTIC
 
 #include "core/core.h"
 #include "core/metronome.h"

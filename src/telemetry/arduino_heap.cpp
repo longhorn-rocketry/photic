@@ -1,20 +1,22 @@
 #include "arduino_heap.h"
 
-using namespace photonic;
+namespace photic {
 
-bool ArduinoHeapIO::write(int addr, byte b) {
+bool ArduinoHeapIO::write(int k_addr, byte k_b) {
 #ifdef ARDUINO
-	EEPROM.write(addr, b);
+	EEPROM.write(k_addr, k_b);
 	return true;
 #else
 	return false;
 #endif
 }
 
-byte ArduinoHeapIO::read(int addr) {
+byte ArduinoHeapIO::read(int k_addr) {
 #ifdef ARDUINO
-	return EEPROM.read(addr);
+	return EEPROM.read(k_addr);
 #else
 	return 0;
 #endif
 }
+
+} // end namespace photic

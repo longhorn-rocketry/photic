@@ -1,114 +1,127 @@
 #ifndef PHOTONIC_MATH_MATRIX_H
 #define PHOTONIC_MATH_MATRIX_H
 
+namespace photic {
+
 /**
-  A lightweight matrix implementation designed for speed. The internal storage
-  is of static size MATRIX_STATIC_SIZE, which can be increased as needed. We
-  chose a default value of 3, as 3x3 is the largest size required by Photonic's
-  Kalman filter.
-
-  Note that, in the interest of speed, there is no bounds checking whatsoever.
-
-  To reduce STL dependencies, rather than throw exceptions for illegal matrix
-  arithmetic, the computation will simply return a 0x0 matrix that will produce
-  0x0 matrices in all subsequent computations. This effect is similar to NaN
-  flooding. If your computations are yielding empty matrices, you are
-  broadcasting incompatible matrices together somewhere.
-*/
+ * A lightweight matrix implementation designed for speed. The internal storage
+ * is of staic size Matrix::m_MATRIX_STATIC_SIZE, which can be increased as
+ * needed. We choose a default value of 3 because 3x3 is the largest size
+ * required by photic::KalmanFilter.
+ *
+ * Note that, in the interest of speed, there is no bounds checking whatsoever.
+ * There are also no exceptions for illegal matrix arithmetic in the interest of
+ * reducing STL dependencies. If bad operands are broadcast together, a 0x0
+ * matrix is returned, which will produce more 0x0 matrices in subsequent
+ * computations. This effect is similar to NaN flooding.
+ */
 class Matrix {
 protected:
-  static const int MATRIX_STATIC_SIZE = 3;
-  float mat[MATRIX_STATIC_SIZE][MATRIX_STATIC_SIZE];
-  int _rows, _cols;
+  static const int m_MATRIX_STATIC_SIZE = 3;
+  float m_mat[m_MATRIX_STATIC_SIZE][m_MATRIX_STATIC_SIZE];
+  int m_rows, m_cols;
 
 public:
   /**
-    @brief default constructor; a 0x0 "null" matrix
-  */
+   * @brief Default constructor creates a 0x0 "null" matrix.
+   */
   Matrix();
 
   /**
     Creates a matrix and populates it with values.
 
-    @param rows row count
-    @param cols column count
-    @param v0...v8 values inserted into the matrix from left to right, top to
-           bottom
+    @param k_rows row count
+    @param k_cols column count
+    @param k_v0...k_v8 values inserted into the matrix from left to right, top
+           to bottom
   */
-  Matrix(int rows, int cols,
-         float v0=0, float v1=0, float v2=0,
-         float v3=0, float v4=0, float v5=0,
-         float v6=0, float v7=0, float v8=0);
+  /**
+   * Creates a matrix and populates it with values.
+   *
+   * @param k_rows     row count
+   * @param k_cols     column count
+   * @param k_v0...8   values to insert into the matrix from left to right, top
+   *                   to bottom
+   */
+  Matrix(int k_rows, int k_cols,
+         float k_v0=0, float k_v1=0, float k_v2=0,
+         float k_v3=0, float k_v4=0, float k_v5=0,
+         float k_v6=0, float k_v7=0, float k_v8=0);
 
   /**
-    @brief copy constructor
-  */
-  Matrix(const Matrix &copy);
+   * @brief Copy constructor.
+   */
+  Matrix(const Matrix &k_copy);
 
   /**
-    @brief fills the matrix from left to right, top to bottom with values from
-           an array
-  */
-  void fill(const float contents[]);
+   * @brief Fills the matrix left to right, top to bottom from an array.
+   */
+  void fill(const float k_contents[]);
 
   /**
-    @brief gets the row count
-  */
+   * @brief Gets the row count.
+   */
   int rows() const;
 
   /**
-    @brief gets the column count
-  */
+   * @brief Gets the column count.
+   */
   int cols() const;
 
   /**
-    @brief allows matrix set and get with bracket indexing
-  */
-  float* operator[](int i);
+   * @brief Allows access via bracket indexing.
+   */
+  float* operator[](int k_i);
 
   /**
-    @brief allows matrix set and get with parentheses indexing
-  */
-  float& operator()(int r, int c);
+   * @brief Allows mutation via parentheses indexing.
+   */
+  float& operator()(int k_r, int k_c);
 
   /**
-    @brief gets the number at position rc
-  */
-  float get(int r, int c) const;
+   * Constant access.
+   *
+   * @param  k_r row index
+   * @param  k_c column index
+   * @return     value at row k_r and column k_c
+   */
+  float get(int k_r, int k_c) const;
 
   /**
-    @brief adds two matrices together
-  */
-  friend Matrix operator+(const Matrix &a, const Matrix &b);
+   * @brief Adds two matrices together.
+   */
+  friend Matrix operator+(const Matrix& k_a, const Matrix& k_b);
 
   /**
-    @brief subtracts two matrices
-  */
-  friend Matrix operator-(const Matrix &a, const Matrix &b);
+   * @brief Subtracts two matrices.
+   */
+  friend Matrix operator-(const Matrix& k_a, const Matrix& k_b);
 
   /**
-    @brief multiplies two matrices
-  */
-  friend Matrix operator*(const Matrix &a, const Matrix &b);
+   * @brief Multiplies two matrices.
+   */
+  friend Matrix operator*(const Matrix& k_a, const Matrix& k_b);
 
   /**
-    @brief computes the inverse of this matrix as though it were 2x2
-  */
+   * @brief Computes the inverse of this matrix as though it were 2x2.
+   */
   Matrix inv2x2() const;
 
   /**
-    @brief computes the inverse of this matrix as though it were 3x3
-  */
+   * @brief Computes the inverse of this matrix as though it were 3x3.
+   */
   Matrix inv3x3() const;
 
   /**
-    @brief computes the transposition of this matrix
-  */
+   * @brief Computes the transposition of this matrix.
+   */
   Matrix t() const;
 };
 
 typedef Matrix matrix;
 
 extern const matrix NULLMAT;
+
+} // end namespace photic
 
 #endif

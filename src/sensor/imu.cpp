@@ -1,54 +1,56 @@
 #include "imu.h"
 
-using namespace photonic;
+namespace photic {
 
-void Imu::read(ImuData *dest) {
-	dest->ax = data.ax;
-	dest->ay = data.ay;
-	dest->az = data.az;
+void Imu::read(ImuData& k_dest) {
+	k_dest.ax = m_data.ax;
+	k_dest.ay = m_data.ay;
+	k_dest.az = m_data.az;
 
-	dest->gx = data.gx;
-	dest->gy = data.gy;
-	dest->gz = data.gz;
+	k_dest.gx = m_data.gx;
+	k_dest.gy = m_data.gy;
+	k_dest.gz = m_data.gz;
 
-	dest->mx = data.mx;
-	dest->my = data.my;
-	dest->mz = data.mz;
+	k_dest.mx = m_data.mx;
+	k_dest.my = m_data.my;
+	k_dest.mz = m_data.mz;
 }
 
 float Imu::get_acc_x() {
-	return data.ax;
+	return m_data.ax;
 }
 
 float Imu::get_acc_y() {
-	return data.ay;
+	return m_data.ay;
 }
 
 float Imu::get_acc_z() {
-	return data.az;
+	return m_data.az;
 }
 
 float Imu::get_gyro_x() {
-	return data.gx;
+	return m_data.gx;
 }
 
 float Imu::get_gyro_y() {
-	return data.gx;
+	return m_data.gx;
 }
 
 float Imu::get_gyro_z() {
-	return data.gz;
+	return m_data.gz;
 }
 
 float Imu::get_mag_x() {
-	return data.mx;
+	return m_data.mx;
 }
 
 float Imu::get_mag_y() {
-	return data.my;
+	return m_data.my;
 }
 
 
 float Imu::get_mag_z() {
-	return data.mz;
+	return m_data.mz;
 }
+
+} // end namespace photic

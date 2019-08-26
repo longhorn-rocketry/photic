@@ -1,120 +1,123 @@
-#ifndef PHOTONIC_TELEMETRY_HISTORY_H
-#define PHOTONIC_TELEMETRY_HISTORY_H
+#ifndef PHOTIC_TELEMETRY_HISTORY_H
+#define PHOTIC_TELEMETRY_HISTORY_H
 
 #include <math.h>
 #include <vector>
 
-namespace photonic {
+namespace photic {
 
 /**
-	A size-restricted, chronological vector of sensor readings with statistical
-	analysis methods.
-*/
+ * A size-restricted, chronological vector of integral types with statistical
+ * analysis methods.
+ */
 template <typename T>
 class history {
 protected:
-	std::vector<T> data;
-	unsigned int size;
-	T history_mean, history_stdev;
-	bool computed;
+	std::vector<T> m_data;
+	unsigned int m_size;
+	T m_history_mean, m_history_stdev;
+	bool m_computed;
 
 	/**
-		@brief computes mean and standard deviation of the history
-	*/
+	 * @brief Computes mean and standard deviation of the history.
+	 */
 	void compute() {
 		T sigma_x = 0, sigma_x_squared = 0;
-		int n = data.size();
+		unsigned int n = m_data.size();
 		for (int i = 0; i < n; i++) {
-			sigma_x += data[i];
-			sigma_x_squared += data[i] * data[i];
+			sigma_x += m_data[i];
+			sigma_x_squared += m_data[i] * m_data[i];
 		}
-		history_mean = sigma_x / n;
-		history_stdev = n < 2 ? 0 :
-				sqrt((sigma_x_squared - sigma_x * sigma_x / n) / (n - 1));
-		computed = true;
+		m_history_mean = sigma_x / n;
+		m_history_stdev = n < 2 ? 0 :
+				              sqrt((sigma_x_squared - sigma_x * sigma_x / n) / (n - 1));
+		m_computed = true;
 	}
 
 public:
 	/**
-		Creates an empty history.
-
-		@param size maximum number of readings in history
-	*/
-	history(unsigned int size) {
-		this->size = size;
-		data.reserve(size);
-		computed = false;
+	 * @brief Creates an empty history of maximum size k_size.
+	 */
+	history(unsigned int k_size) {
+		m_size = k_size;
+		m_data.reserve(k_size);
+		m_computed = false;
 	}
 
 	/**
-		@brief gets the mean of history contents
-	*/
+	 * @brief Gets the mean of the history contents.
+	 */
 	T mean() {
-		if (!computed)
+		if (!m_computed)
 			compute();
-		return history_mean;
+
+		return m_history_mean;
 	}
 
 	/**
-		@brief gets the standard deviation of history contents
-	*/
+	 * @brief Gets the standard deviation of the history contents.
+	 */
 	T stdev() {
-		if (!computed)
+		if (!m_computed)
 			compute();
-		return history_stdev;
+
+		return m_history_stdev;
 	}
 
 	/**
-		@brief allows history access indexing via []
-	*/
-	T operator[](unsigned int i) const {
-		return data[i];
+	 * @brief Allows access via bracket indexing.
+	 */
+	T operator[](unsigned int k_i) const {
+		return m_data[k_i];
 	}
 
 	/**
-		@brief allows history mutation indexing via []
-	*/
-  T& operator[](unsigned int i) {
-		computed = false;
-		return data[i];
+	 * @brief Allows mutation via bracket indexing.
+	 */
+  T& operator[](unsigned int k_i) {
+		m_computed = false;
+
+		return m_data[k_i];
 	}
 
 	/**
-		Adds a new value to the history. If the history is at maximum capacity,
-		the oldest value is thrown out.
+	 * Adds a new value to the history. If the history is at capacity, the oldest
+	 * value is thrown out.
+	 *
+	 * @param k_t value to add
+	 */
+	void add(T k_t) {
+		if (m_data.size() == m_size)
+			m_data.erase(m_data.begin());
 
-		@param t value to add
-	*/
-	void add(T t) {
-		if (data.size() == size)
-			data.erase(data.begin());
-		data.push_back(t);
-		computed = false;
+		m_data.push_back(k_t);
+
+		m_computed = false;
 	}
 
 	/**
-		@brief gets whether or not the history is full
-	*/
+	 * @brief Gets whether or not the history is at capacity.
+	 */
 	bool at_capacity() {
-		return data.size() == size;
+		return m_data.size() == m_size;
 	}
 
 	/**
-		@brief gets the number of items currently in the history (will be size if
-		       at_capacity())
-	*/
+	 * @brief Gets the number of items currently in the history
+	 *        (at_capacity() -> get_index() == initial_size).
+	 */
 	int get_index() {
-		return data.size();
+		return m_data.size();
 	}
 
   /**
-   * @brief clears the history
+   * @brief Clears the history.
    */
   void clear() {
-    data.clear();
+    m_data.clear();
   }
 };
 
-}; // end namespace photonic
+} // end namespace photic
 
 #endif

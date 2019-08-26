@@ -1,88 +1,99 @@
 #include "matrix.h"
 
+namespace photic {
+
 const matrix NULLMAT(0, 0);
 
 Matrix::Matrix() {
-  _rows = 0;
-  _cols = 0;
+  m_rows = 0;
+  m_cols = 0;
 }
 
-Matrix::Matrix(int rows, int cols, float v0, float v1, float v2, float v3,
-               float v4, float v5, float v6, float v7, float v8) {
-  _rows = rows;
-  _cols = cols;
-  float contents[] = {v0, v1, v2, v3, v4, v5, v6, v7, v8};
+Matrix::Matrix(int k_rows, int k_cols,
+               float k_v0, float k_v1, float k_v2,
+               float k_v3, float k_v4, float k_v5,
+               float k_v6, float k_v7, float k_v8)
+{
+  m_rows = k_rows;
+  m_cols = k_cols;
+  float contents[] = {k_v0, k_v1, k_v2, k_v3, k_v4, k_v5, k_v6, k_v7, k_v8};
   fill(contents);
 }
 
-Matrix::Matrix(const Matrix &copy) {
-  _rows = copy._rows;
-  _cols = copy._cols;
-  for (int r = 0; r < _rows; r++)
-    for (int c = 0; c < _cols; c++)
-      mat[r][c] = copy.get(r, c);
+Matrix::Matrix(const Matrix &k_copy) {
+  m_rows = k_copy.m_rows;
+  m_cols = k_copy.m_cols;
+
+  for (int r = 0; r < m_rows; r++)
+    for (int c = 0; c < m_cols; c++)
+      m_mat[r][c] = k_copy.get(r, c);
 }
 
-void Matrix::fill(const float contents[]) {
-  for (int r = 0; r < _rows; r++)
-    for (int c = 0; c < _cols; c++)
-      mat[r][c] = contents[r * _cols + c];
+void Matrix::fill(const float k_contents[]) {
+  for (int r = 0; r < m_rows; r++)
+    for (int c = 0; c < m_cols; c++)
+      m_mat[r][c] = k_contents[r * m_cols + c];
 }
 
 int Matrix::rows() const {
-  return _rows;
+  return m_rows;
 }
 
 int Matrix::cols() const {
-  return _cols;
+  return m_cols;
 }
 
-float* Matrix::operator[](int i) {
-  return mat[i];
+float* Matrix::operator[](int k_i) {
+  return m_mat[k_i];
 }
 
-float& Matrix::operator()(int r, int c) {
-  return mat[r][c];
+float& Matrix::operator()(int k_r, int k_c) {
+  return m_mat[k_r][k_c];
 }
 
-float Matrix::get(int r, int c) const {
-  return mat[r][c];
+float Matrix::get(int k_r, int k_c) const {
+  return m_mat[k_r][k_c];
 }
 
-Matrix operator+(const Matrix &a, const Matrix&b) {
-  if (a._rows != b._rows || a._cols != b._cols)
+Matrix operator+(const Matrix& k_a, const Matrix& k_b) {
+  if (k_a.m_rows != k_b.m_rows || k_a.m_cols != k_b.m_cols)
     return NULLMAT;
 
-  matrix sum(a._rows, a._cols);
-  for (int r = 0; r < sum._rows; r++)
-    for (int c = 0; c < sum._cols; c++)
-      sum[r][c] = a.get(r, c) + b.get(r, c);
+  matrix sum(k_a.m_rows, k_a.m_cols);
+
+  for (int r = 0; r < sum.m_rows; r++)
+    for (int c = 0; c < sum.m_cols; c++)
+      sum[r][c] = k_a.get(r, c) + k_b.get(r, c);
 
   return sum;
 }
 
-Matrix operator-(const Matrix &a, const Matrix&b) {
-  if (a._rows != b._rows || a._cols != b._cols)
+Matrix operator-(const Matrix& k_a, const Matrix& k_b) {
+  if (k_a.m_rows != k_b.m_rows || k_a.m_cols != k_b.m_cols)
     return NULLMAT;
 
-  matrix diff(a._rows, a._cols);
-  for (int r = 0; r < diff._rows; r++)
-    for (int c = 0; c < diff._cols; c++)
-      diff[r][c] = a.get(r, c) - b.get(r, c);
+  matrix diff(k_a.m_rows, k_a.m_cols);
+
+  for (int r = 0; r < diff.m_rows; r++)
+    for (int c = 0; c < diff.m_cols; c++)
+      diff[r][c] = k_a.get(r, c) - k_b.get(r, c);
 
   return diff;
 }
 
-Matrix operator*(const Matrix &a, const Matrix &b) {
-  if (a._cols != b._rows)
+Matrix operator*(const Matrix& k_a, const Matrix& k_b) {
+  if (k_a.m_cols != k_b.m_rows)
     return NULLMAT;
 
-  matrix prod(a._rows, b._cols);
-  for (int r = 0; r < prod._rows; r++)
-    for (int c = 0; c < prod._cols; c++) {
+  matrix prod(k_a.m_rows, k_b.m_cols);
+
+  for (int r = 0; r < prod.m_rows; r++)
+    for (int c = 0; c < prod.m_cols; c++) {
       float k = 0;
-      for (int j = 0; j < a._cols; j++)
-        k += a.get(r, j) * b.get(j, c);
+
+      for (int j = 0; j < k_a.m_cols; j++)
+        k += k_a.get(r, j) * k_b.get(j, c);
+
       prod[r][c] = k;
     }
 
@@ -90,35 +101,40 @@ Matrix operator*(const Matrix &a, const Matrix &b) {
 }
 
 Matrix Matrix::inv2x2() const {
-  float det = mat[0][0] * mat[1][1] - mat[0][1] * mat[1][0];
+  float det = m_mat[0][0] * m_mat[1][1] - m_mat[0][1] * m_mat[1][0];
   return Matrix(2, 2,
-      mat[1][1] / det, -mat[0][1] / det,
-      -mat[1][0] / det, mat[0][0] / det);
+    m_mat[1][1] / det, -m_mat[0][1] / det,
+    -m_mat[1][0] / det, m_mat[0][0] / det
+  );
 }
 
 Matrix Matrix::inv3x3() const {
-  float det = mat[0][0] * (mat[1][1] * mat[2][2] - mat[2][1] * mat[1][2]) -
-              mat[0][1] * (mat[1][0] * mat[2][2] - mat[1][2] * mat[2][0]) +
-              mat[0][2] * (mat[1][0] * mat[2][1] - mat[1][1] * mat[2][0]);
+  float det =
+    m_mat[0][0] * (m_mat[1][1] * m_mat[2][2] - m_mat[2][1] * m_mat[1][2]) -
+    m_mat[0][1] * (m_mat[1][0] * m_mat[2][2] - m_mat[1][2] * m_mat[2][0]) +
+    m_mat[0][2] * (m_mat[1][0] * m_mat[2][1] - m_mat[1][1] * m_mat[2][0]);
 
   return Matrix(3, 3,
-      (mat[1][1] * mat[2][2] - mat[2][1] * mat[1][2]) / det,
-      (mat[0][2] * mat[2][1] - mat[0][1] * mat[2][2]) / det,
-      (mat[0][1] * mat[1][2] - mat[0][2] * mat[1][1]) / det,
-      (mat[1][2] * mat[2][0] - mat[1][0] * mat[2][2]) / det,
-      (mat[0][0] * mat[2][2] - mat[0][2] * mat[2][0]) / det,
-      (mat[1][0] * mat[0][2] - mat[0][0] * mat[1][2]) / det,
-      (mat[1][0] * mat[2][1] - mat[2][0] * mat[1][1]) / det,
-      (mat[2][0] * mat[0][1] - mat[0][0] * mat[2][1]) / det,
-      (mat[0][0] * mat[1][1] - mat[1][0] * mat[0][1]) / det);
+    (m_mat[1][1] * m_mat[2][2] - m_mat[2][1] * m_mat[1][2]) / det,
+    (m_mat[0][2] * m_mat[2][1] - m_mat[0][1] * m_mat[2][2]) / det,
+    (m_mat[0][1] * m_mat[1][2] - m_mat[0][2] * m_mat[1][1]) / det,
+    (m_mat[1][2] * m_mat[2][0] - m_mat[1][0] * m_mat[2][2]) / det,
+    (m_mat[0][0] * m_mat[2][2] - m_mat[0][2] * m_mat[2][0]) / det,
+    (m_mat[1][0] * m_mat[0][2] - m_mat[0][0] * m_mat[1][2]) / det,
+    (m_mat[1][0] * m_mat[2][1] - m_mat[2][0] * m_mat[1][1]) / det,
+    (m_mat[2][0] * m_mat[0][1] - m_mat[0][0] * m_mat[2][1]) / det,
+    (m_mat[0][0] * m_mat[1][1] - m_mat[1][0] * m_mat[0][1]) / det
+  );
 }
 
 Matrix Matrix::t() const {
-  Matrix trans(_cols, _rows);
+  Matrix trans(m_cols, m_rows);
 
-  for (int r = 0; r < _rows; r++)
-    for (int c = 0; c < _cols; c++)
-      trans[c][r] = mat[r][c];
+  for (int r = 0; r < m_rows; r++)
+    for (int c = 0; c < m_cols; c++)
+      trans[c][r] = m_mat[r][c];
 
   return trans;
 }
+
+} // end namespace photic

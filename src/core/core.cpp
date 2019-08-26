@@ -3,247 +3,229 @@
 
 #include <math.h>
 
-namespace photonic {
+namespace photic {
 
-bool __photonic_has_initialized = false;
+bool has_initialized = false;;
 
-float __photonic_epoch_time = -1;
-float __rocket_ignition_time = -1;
-float __rocket_burnout_time = -1;
-float __rocket_apogee_time = -1;
+float t_epoch = -1;
+float t_ignition = -1;
+float t_burnout = -1;
+float t_apogee = -1;
 
-bool __flight_event_burnout = false;
-bool __flight_event_apogee = false;
+bool event_ignition;
+bool event_burnout = false;
+bool event_apogee = false;
 
-float __rocket_ignition_g_trigger = 0;
-float __rocket_no_ignition_grace_period = 0;
-float __rocket_burnout_detection_negligence = 0.25;
-float __rocket_apogee_detection_negligence = 0.25;
-float __rocket_burnout_acceleration = -1;
-float __rocket_apogee_velocity = 0;
-float __rocket_automatic_burnout = -1;
-float __rocket_automatic_apogee = -1;
+float ignition_g_trigger = 0;
+float ignition_g_trigger_negl = 0;
+float no_ignition_grace_period = 0;
 
-int __rocket_wait_for_liftoff_ma_size = 10;
+bool trigger_burnout_on_neg_accel = false;
+float trigger_burnout_on_neg_accel_negl = 0;
+bool trigger_burnout_on_timeout = false;
+float trigger_burnout_on_timeout_val = 0;
 
-Imu *__rocket_primary_imu = nullptr;
-Barometer *__rocket_primary_barometer = nullptr;
-Timekeeper *__rocket_timekeeper = nullptr;
-history<float> *__rocket_vertical_accel_history = nullptr;
-history<float> *__rocket_vertical_velocity_history = nullptr;
-TelemetryHeap *__rocket_telemetry_heap = nullptr;
+bool trigger_apogee_on_neg_vel = false;
+float trigger_apogee_on_neg_vel_negl = 0;
+bool trigger_apogee_on_timeout = false;
+float trigger_apogee_on_timeout_val = 0;
 
-axis __rocket_vertical_imu_axis = Z;
+Imu* primary_imu = nullptr;
+Barometer* primary_barometer = nullptr;
+TelemetryHeap* telemetry_heap = nullptr;
 
-microcontroller_model __rocket_microcontroller = NONE;
+history<float>* vertical_accel_history = nullptr;
+history<float>* vertical_velocity_history = nullptr;
+history<float>* altitude_history = nullptr;
 
-apogee_detection_method __rocket_apogee_detection_method =
-		APPROX_FREEFALL_ACCEL;
+Axis vertical_axis = Z;
+Timekeeper* timekeeper = nullptr;
+MicrocontrollerModel microcontroller_model = NONE;
 
-burnout_detection_method __rocket_burnout_detection_method =
-		NEGATIVE_AVG_ACCEL;
+void start() {
+  if (has_initialized)
+    return;
 
-void photonic_init() {
-	__photonic_has_initialized = true;
+  has_initialized = true;
+  t_epoch = timekeeper->time();
+  t_ignition = -1;
+  t_burnout = -1;
+  t_apogee = -1;
+  event_ignition;
+  event_burnout = false;
+  event_apogee = false;
+}
 
-	// If the client is running Arduino, we know what timekeeper to use
-#ifdef ARDUINO
-	photonic_configure(ROCKET_TIMEKEEPER, new ArduinoTimekeeper());
-#endif
-
-	if (__rocket_timekeeper != nullptr)
-		__photonic_epoch_time = __rocket_timekeeper->time();
+void restart() {
+  has_initialized = false;
+  start();
 }
 
 float rocket_time() {
-	return __rocket_timekeeper->time() - __photonic_epoch_time;
+  return timekeeper->time() - t_epoch;
 }
 
 float flight_time() {
-	return __rocket_ignition_time == -1 ? -1 : __rocket_timekeeper->time() -
-			__rocket_ignition_time;
+  return timekeeper->time() - t_ignition;
 }
 
-void photonic_configure(config c, double d) {
-	if (!__photonic_has_initialized)
-		photonic_init();
+bool config(ConfigParameter k_param, double k_val) {
+  if (k_param == ROCKET_IGNITION_G_TRIGGER)
+    ignition_g_trigger = k_val;
+  else if (k_param == ROCKET_IGNITION_G_TRIGGER_NEGL)
+    ignition_g_trigger_negl = k_val;
+  else if (k_param == ROCKET_NO_IGNITION_GRACE_PERIOD)
+    no_ignition_grace_period = k_val;
+  else if (k_param == ROCKET_TRIGGER_BURNOUT_ON_NEG_ACCEL_NEGL)
+    trigger_burnout_on_neg_accel_negl = k_val;
+  else if (k_param == ROCKET_TRIGGER_BURNOUT_ON_TIMEOUT_VAL)
+    trigger_burnout_on_timeout_val = k_val;
+  else if (k_param == ROCKET_TRIGGER_APOGEE_ON_NEG_VEL_NEGL)
+    trigger_apogee_on_neg_vel_negl = k_val;
+  else if (k_param == ROCKET_TRIGGER_APOGEE_ON_TIMEOUT_VAL)
+    trigger_apogee_on_timeout_val = k_val;
+  else
+    return false;
 
-	if (c == ROCKET_WAIT_FOR_LIFTOFF_MA_SIZE)
-		__rocket_wait_for_liftoff_ma_size = d;
-	else if (c == ROCKET_IGNITION_G_TRIGGER)
-		__rocket_ignition_g_trigger = d;
-	else if (c == ROCKET_NO_IGNITION_GRACE_PERIOD)
-		__rocket_no_ignition_grace_period = d;
-	else if (c == ROCKET_BURNOUT_DETECTION_NEGLIGENCE)
-		__rocket_burnout_detection_negligence = d;
-	else if (c == ROCKET_APOGEE_DETECTION_NEGLIGENCE)
-		__rocket_apogee_detection_negligence = d;
-	else if (c == ROCKET_BURNOUT_ACCELERATION)
-		__rocket_burnout_acceleration = d;
-	else if (c == ROCKET_APOGEE_VELOCITY)
-		__rocket_apogee_velocity = d;
-	else if (c == ROCKET_AUTOMATIC_BURNOUT)
-		__rocket_automatic_burnout = d;
-	else if (c == ROCKET_AUTOMATIC_APOGEE)
-		__rocket_automatic_apogee = d;
+  return true;
 }
 
-void photonic_configure(config c, void *ptr) {
-	if (c == ROCKET_PRIMARY_IMU)
-		__rocket_primary_imu = (Imu*)ptr;
-	else if (c == ROCKET_PRIMARY_BAROMETER)
-		__rocket_primary_barometer = (Barometer*)ptr;
-	else if (c == ROCKET_TIMEKEEPER)
-		__rocket_timekeeper = (Timekeeper*)ptr;
-	else if (c == ROCKET_VERTICAL_ACCEL_HISTORY)
-		__rocket_vertical_accel_history = (history<float>*)ptr;
-	else if (c == ROCKET_VERTICAL_VELOCITY_HISTORY)
-		__rocket_vertical_velocity_history = (history<float>*)ptr;
-	else if (c == ROCKET_TELEMETRY_HEAP) {
-		__rocket_telemetry_heap = (TelemetryHeap*)ptr;
-		if (__rocket_telemetry_heap != nullptr)
-			__rocket_telemetry_heap->auto_configure();
-	}
+bool config(ConfigParameter k_param, bool k_b) {
+  if (k_param == ROCKET_TRIGGER_BURNOUT_ON_NEG_ACCEL)
+    trigger_burnout_on_neg_accel = k_b;
+  else if (k_param == ROCKET_TRIGGER_BURNOUT_ON_TIMEOUT)
+    trigger_burnout_on_timeout = k_b;
+  else if (k_param == ROCKET_TRIGGER_APOGEE_ON_NEG_VEL)
+    trigger_apogee_on_neg_vel = k_b;
+  else if (k_param == ROCKET_TRIGGER_APOGEE_ON_TIMEOUT)
+    trigger_apogee_on_timeout = k_b;
+  else
+    return false;
 
-  if (!__photonic_has_initialized)
-		photonic_init();
+  return true;
 }
 
-void photonic_configure(config c, axis a) {
-	if (!__photonic_has_initialized)
-		photonic_init();
+bool config(ConfigParameter k_param, void* k_ptr) {
+  if (k_param == ROCKET_PRIMARY_IMU) {
+    primary_imu = (Imu*)k_ptr;
+    primary_imu->initialize();
+  } else if (k_param == ROCKET_PRIMARY_BAROMETER) {
+    primary_barometer = (Barometer*)k_ptr;
+    primary_barometer->initialize();
+  } else if (k_param == ROCKET_TELEMETRY_HEAP)
+    telemetry_heap = (TelemetryHeap*)k_ptr;
+  else if (k_param == ROCKET_VERTICAL_ACCEL_HISTORY)
+    vertical_accel_history = (history<float>*)k_ptr;
+  else if (k_param == ROCKET_VERTICAL_VELOCITY_HISTORY)
+    vertical_velocity_history = (history<float>*)k_ptr;
+  else if (k_param == ROCKET_ALTITUDE_HISTORY)
+    altitude_history = (history<float>*)k_ptr;
+  else if (k_param == ROCKET_TIMEKEEPER) {
+    timekeeper = (Timekeeper*)k_ptr;
+    start();
+  } else
+    return false;
 
-	if (c == ROCKET_VERTICAL_IMU_AXIS)
-		__rocket_vertical_imu_axis = a;
+  return true;
 }
 
-void photonic_configure(config c, microcontroller_model m) {
-	if (!__photonic_has_initialized)
-		photonic_init();
+bool config(ConfigParameter k_param, Axis k_axis) {
+  if (k_param == ROCKET_VERTICAL_AXIS)
+    vertical_axis = k_axis;
+  else
+    return false;
 
-	if (c == ROCKET_MICROCONTROLLER)
-		__rocket_microcontroller = m;
+  return true;
 }
 
-void photonic_configure(config c, apogee_detection_method a) {
-	if (!__photonic_has_initialized)
-		photonic_init();
+bool config(ConfigParameter k_param, MicrocontrollerModel k_model) {
+  if (k_param == ROCKET_MICROCONTROLLER_MODEL) {
+    microcontroller_model = k_model;
 
-	if (c == ROCKET_APOGEE_DETECTION_METHOD)
-		__rocket_apogee_detection_method = a;
+    if (k_model != OTHER && k_model != NONE)
+      config(ROCKET_TIMEKEEPER, new photic::ArduinoTimekeeper());
+  } else
+    return false;
+
+  return true;
 }
 
-void photonic_configure(config c, burnout_detection_method a) {
-	if (!__photonic_has_initialized)
-		photonic_init();
+bool check_for_liftoff() {
+  if (event_ignition)
+    return true;
 
-	if (c == ROCKET_BURNOUT_DETECTION_METHOD)
-		__rocket_burnout_detection_method = a;
-}
+  if (rocket_time() < no_ignition_grace_period)
+    return false;
 
-void wait_for_liftoff() {
-	if (!__photonic_has_initialized ||
-		  __rocket_primary_imu == nullptr ||
-			__rocket_timekeeper == nullptr)
-		return;
+  if (vertical_accel_history->at_capacity()) {
+    bool detected;
+    float accel = vertical_accel_history->mean();
+    detected = accel + ignition_g_trigger_negl > ignition_g_trigger;
 
-	float time_start = __rocket_timekeeper->time();
-	float *accels = new float[__rocket_wait_for_liftoff_ma_size];
-	float accel_avg = 0;
-	int readings = 0;
+    if (detected && !event_ignition) {
+      event_ignition = true;
+      t_ignition = timekeeper->time();
+    }
+  }
 
-	while (readings < __rocket_wait_for_liftoff_ma_size ||
-			   fabs(accel_avg) < __rocket_ignition_g_trigger ||
-			   __rocket_timekeeper->time() - time_start <= __rocket_no_ignition_grace_period) {
-		// Add new accel value
-		__rocket_primary_imu->update();
-		float accel = 0;
-		switch (__rocket_vertical_imu_axis) {
-			case X:
-				accel = __rocket_primary_imu->get_acc_x();
-				break;
-			case Y:
-				accel = __rocket_primary_imu->get_acc_y();
-				break;
-			case Z:
-				accel = __rocket_primary_imu->get_acc_z();
-				break;
-		}
-		accels[readings % __rocket_wait_for_liftoff_ma_size] = accel;
-		readings++;
-
-		// Find avg accel
-		float accel_total = 0;
-		for (int i = 0; i < __rocket_wait_for_liftoff_ma_size; i++)
-			accel_total += accels[i];
-		accel_avg = accel_total / __rocket_wait_for_liftoff_ma_size;
-	}
-
-	__rocket_ignition_time = __rocket_timekeeper->time();
-	delete accels;
+  return event_ignition;
 }
 
 bool check_for_burnout() {
-	if (__flight_event_burnout)
-		return true;
-	else if (__rocket_vertical_accel_history == nullptr)
-		return false;
+  if (event_burnout)
+    return true;
 
-	if (__rocket_burnout_detection_method == NEGATIVE_AVG_ACCEL) {
-		if (__rocket_vertical_accel_history->at_capacity() &&
-		 		__rocket_vertical_accel_history->mean() < 0)
-			__flight_event_burnout = true;
-	} else if (__rocket_burnout_detection_method == APPROX_BURNOUT_ACCEL) {
-		if (__rocket_vertical_accel_history->at_capacity() &&
-				approx(__rocket_vertical_accel_history->mean(),
-						   __rocket_burnout_acceleration,
-						   __rocket_burnout_detection_negligence))
-			__flight_event_burnout = true;
-	}
+  bool detected;
 
-	if (__rocket_automatic_burnout != -1 &&
-		  flight_time() > __rocket_automatic_burnout)
-		__flight_event_burnout = true;
+  if (trigger_burnout_on_neg_accel && vertical_accel_history->at_capacity()) {
+    float accel = vertical_accel_history->mean();
+    detected = accel - trigger_burnout_on_neg_accel_negl < 0;
+  }
 
-	if (__flight_event_burnout)
-		__rocket_burnout_time = flight_time();
+  if (!detected && trigger_burnout_on_timeout) {
+    float t = flight_time();
+    detected = t >= trigger_burnout_on_timeout_val;
+  }
 
-	return __flight_event_burnout;
+  if (detected && !event_burnout) {
+    event_burnout = true;
+    t_burnout = timekeeper->time();
+  }
+
+  return event_burnout;
 }
 
 bool check_for_apogee() {
-	if (__flight_event_apogee)
-		return true;
+  if (event_apogee)
+    return true;
 
-	if (__rocket_apogee_detection_method == APPROX_ZERO_VELOCITY) {
-		float velocity_avg = __rocket_vertical_velocity_history->mean();
-		if (__rocket_vertical_velocity_history->at_capacity() &&
-				approx(velocity_avg,
-					     __rocket_apogee_velocity,
-						   __rocket_apogee_detection_negligence))
-			__flight_event_apogee = true;
-	} else if (__rocket_apogee_detection_method == APPROX_FREEFALL_ACCEL) {
-		float accel_avg = __rocket_vertical_accel_history->mean();
-		if (__rocket_vertical_accel_history->at_capacity() &&
-				approx(accel_avg,
-					     -1,
-							 __rocket_apogee_detection_negligence))
-			__flight_event_apogee = true;
-	} else if (__rocket_apogee_detection_method == NEGATIVE_AVG_VELOCITY) {
-		float velocity_avg = __rocket_vertical_velocity_history->mean();
-		if (__rocket_vertical_velocity_history->at_capacity() &&
-		    velocity_avg < 0)
-				__flight_event_apogee = true;
-	}
+  bool detected;
 
-	if (__rocket_automatic_apogee != -1 &&
-		  flight_time() > __rocket_automatic_apogee)
-		__flight_event_apogee = true;
+  if (trigger_apogee_on_neg_vel && vertical_velocity_history->at_capacity()) {
+    float vel = vertical_velocity_history->mean();
+    detected = vel - trigger_apogee_on_neg_vel_negl < 0;
+  }
 
-	if (__flight_event_apogee)
-		__rocket_apogee_time = flight_time();
+  if (!detected && trigger_apogee_on_timeout) {
+    float t = flight_time();
+    detected = t >= trigger_apogee_on_timeout_val;
+  }
 
-	return __flight_event_apogee;
+  if (detected && !event_apogee) {
+    event_apogee = true;
+    t_apogee = timekeeper->time();
+  }
+
+  return event_apogee;
 }
 
-}; // end namespace photonic
+void wait_for_liftoff() {
+  history<float> hist(10);
+
+  do {
+    primary_imu->update();
+    hist.add(primary_imu->get_acc_z());
+  } while (!hist.at_capacity() || hist.mean() < ignition_g_trigger);
+}
+
+} // end namespace photic

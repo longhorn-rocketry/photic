@@ -1,7 +1,7 @@
-#ifndef PHOTONIC_SENSOR_BAROMETER_H
-#define PHOTONIC_SENSOR_BAROMETER_H
+#ifndef PHOTIC_SENSOR_BAROMETER_H
+#define PHOTIC_SENSOR_BAROMETER_H
 
-namespace photonic {
+namespace photic {
 
 /**
 	Common barometer readings
@@ -12,50 +12,48 @@ struct BarometerData {
 	float temperature;
 };
 
-/**
-	Abstract barometer wrapper to be derived by the client and specialized for
-	their barometer model and wire mappings.
-*/
+/*
+ * An abstract barometer wrapper to be derived by the client and specialized for
+ * their barometer model and wire mappings.
+ */
 class Barometer {
 protected:
-	BarometerData data;
+	BarometerData m_data;
 
 public:
 	virtual ~Barometer() = default;
 
 	/**
-		@brief setup function, usually a handshake over I2C or serial; should return
-		       if initialization succeeded
-	*/
+	 * @brief One-time setup, usually a handshake.
+	 */
 	virtual bool initialize() = 0;
 
 	/**
-		@brief updates all sensor readings within the internal BarometerData struct
-	*/
+	 * @brief Updates all sensor readings in the internal BarometerData struct.
+	 */
 	virtual void update() = 0;
 
 	/**
-		@brief reads all sensor readings into a client's BarometerData struct
-	*/
-	void read(BarometerData *dest);
+	 * @brief Reads all sensor readings into another BarometerData struct.
+	 */
+	void read(BarometerData& k_dest);
 
 	/**
-		@brief gets the pressure reading; note: selective read functions such as
-		       this and those herein do not place update() calls
-	*/
+	 * @brief Gets the last pressure reading.
+	 */
 	float get_pressure();
 
 	/**
-		@brief gets the altitude reading
-	*/
+	 * @brief Gets the last altitude reading.
+	 */
 	float get_altitude();
 
 	/**
-		@brief gets y acceleration
-	*/
+	 * @brief Gets the last temperature reading.
+	 */
 	float get_temperature();
 };
 
-}; // end namespace photonic
+} // end namespace photic
 
 #endif

@@ -1,35 +1,36 @@
-#ifndef PHOTONIC_CORE_TIMEKEEPING_H
-#define PHOTONIC_CORE_TIMEKEEPING_H
+#ifndef PHOTIC_CORE_TIMEKEEPING_H
+#define PHOTIC_CORE_TIMEKEEPING_H
 
-namespace photonic {
+namespace photic {
 
 /**
-	An agent that produces time measurements.
-*/
+ * A source of time measurements.
+ */
 class Timekeeper {
 public:
 	/**
-		@brief tears down the timekeeper
-	*/
+	 * @brief Tears down the timekeeper.
+	 */
 	virtual ~Timekeeper() = default;
 
 	/**
-		@brief gets the current time in seconds, relative to nothing in particular
-	*/
+	 * @brief Gets the current time. Units and relativity are up to the
+	 *        implementor.
+	 */
 	virtual float time() = 0;
 };
 
 /**
-	Timekeeping via Arduino's millis()
-*/
+ * Timekeeping via Arduino's millis().
+ */
 class ArduinoTimekeeper : public Timekeeper {
 public:
 	/**
-		@brief gets the current Arduino time in seconds
-	*/
+	 * @brief Gets Arduino time in seconds.
+	 */
 	float time();
 };
 
-}; // end namespace photonic
+} // end namespace photic
 
 #endif

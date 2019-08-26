@@ -4,7 +4,7 @@
 	#include <Arduino.h>
 #endif
 
-using namespace photonic;
+namespace photic {
 
 float ArduinoTimekeeper::time() {
 #ifdef ARDUINO
@@ -13,3 +13,5 @@ float ArduinoTimekeeper::time() {
 	return -1;
 #endif
 }
+
+} // end namespace photic

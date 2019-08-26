@@ -1,28 +1,30 @@
 #include "metronome.h"
 
-using namespace photonic;
+namespace photic {
 
-Metronome::Metronome(float frequency) {
-  this->frequency = frequency;
-  wavelength = 1 / frequency;
-  t_last = -1;
-  dt = -1;
+Metronome::Metronome(float k_freq) {
+  m_frequency = k_freq;
+  m_wavelength = 1 / k_freq;
+  m_t_last = -1;
+  m_dt = -1;
 }
 
-bool Metronome::poll(float t) {
-  if (t_last == -1 || t - t_last >= wavelength) {
-    if (t_last != -1)
-      dt = t - t_last;
-    t_last = t;
+bool Metronome::poll(float k_t) {
+  if (m_t_last == -1 || k_t - m_t_last >= m_wavelength) {
+    if (m_t_last != -1)
+      m_dt = k_t - m_t_last;
+    m_t_last = k_t;
     return true;
   }
   return false;
 }
 
 float Metronome::get_wavelength() {
-  return wavelength;
+  return m_wavelength;
 }
 
 float Metronome::get_dt() {
-  return dt;
+  return m_dt;
 }
+
+} // end namespace photic
