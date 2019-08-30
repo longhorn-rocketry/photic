@@ -69,7 +69,7 @@ float flight_time() {
   return timekeeper->time() - t_ignition;
 }
 
-bool config(ConfigParameter k_param, double k_val) {
+bool config(PhoticConfigParameter k_param, double k_val) {
   if (k_param == ROCKET_IGNITION_G_TRIGGER)
     ignition_g_trigger = k_val;
   else if (k_param == ROCKET_IGNITION_G_TRIGGER_NEGL)
@@ -90,7 +90,7 @@ bool config(ConfigParameter k_param, double k_val) {
   return true;
 }
 
-bool config(ConfigParameter k_param, bool k_b) {
+bool config(PhoticConfigParameter k_param, bool k_b) {
   if (k_param == ROCKET_TRIGGER_BURNOUT_ON_NEG_ACCEL)
     trigger_burnout_on_neg_accel = k_b;
   else if (k_param == ROCKET_TRIGGER_BURNOUT_ON_TIMEOUT)
@@ -105,7 +105,7 @@ bool config(ConfigParameter k_param, bool k_b) {
   return true;
 }
 
-bool config(ConfigParameter k_param, void* k_ptr) {
+bool config(PhoticConfigParameter k_param, void* k_ptr) {
   if (k_param == ROCKET_PRIMARY_IMU) {
     primary_imu = (Imu*)k_ptr;
     primary_imu->initialize();
@@ -129,7 +129,7 @@ bool config(ConfigParameter k_param, void* k_ptr) {
   return true;
 }
 
-bool config(ConfigParameter k_param, Axis k_axis) {
+bool config(PhoticConfigParameter k_param, Axis k_axis) {
   if (k_param == ROCKET_VERTICAL_AXIS)
     vertical_axis = k_axis;
   else
@@ -138,7 +138,7 @@ bool config(ConfigParameter k_param, Axis k_axis) {
   return true;
 }
 
-bool config(ConfigParameter k_param, MicrocontrollerModel k_model) {
+bool config(PhoticConfigParameter k_param, MicrocontrollerModel k_model) {
   if (k_param == ROCKET_MICROCONTROLLER_MODEL) {
     microcontroller_model = k_model;
 
@@ -172,6 +172,9 @@ bool check_for_liftoff() {
 }
 
 bool check_for_burnout() {
+  if (!event_ignition)
+    return false;
+
   if (event_burnout)
     return true;
 

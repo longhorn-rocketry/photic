@@ -9,7 +9,7 @@
 #include "../telemetry/heap.h"
 #include "../telemetry/history.h"
 
-enum ConfigParameter {
+enum PhoticConfigParameter {
   // Ignition detection
   ROCKET_IGNITION_G_TRIGGER,
   ROCKET_IGNITION_G_TRIGGER_NEGL,
@@ -128,27 +128,27 @@ float flight_time();
 /**
  * @brief Configures integral photic parameters.
  */
-bool config(ConfigParameter k_param, double k_val);
+bool config(PhoticConfigParameter k_param, double k_val);
 
 /**
  * @brief Configures boolean photic parameters.
  */
-bool config(ConfigParameter k_param, bool k_b);
+bool config(PhoticConfigParameter k_param, bool k_b);
 
 /**
  * @brief Configures pointer photic parameters.
  */
-bool config(ConfigParameter k_param, void* k_ptr);
+bool config(PhoticConfigParameter k_param, void* k_ptr);
 
 /**
  * @brief Configures axis photic parameters.
  */
-bool config(ConfigParameter k_param, Axis k_axis);
+bool config(PhoticConfigParameter k_param, Axis k_axis);
 
 /**
  * @brief Configures microcontroller photic parameters.
  */
-bool config(ConfigParameter k_param, MicrocontrollerModel k_model);
+bool config(PhoticConfigParameter k_param, MicrocontrollerModel k_model);
 
 /**
  * Gets whether or not liftoff has been detected. If it has not been, an attempt
