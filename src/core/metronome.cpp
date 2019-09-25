@@ -27,4 +27,8 @@ float Metronome::get_dt() {
   return m_dt;
 }
 
+float Metronome::reset() {
+  m_t_last = -1;
+}
+
 } // end namespace photic

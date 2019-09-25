@@ -48,6 +48,12 @@ public:
    * @return dt
    */
   float get_dt();
+
+  /**
+   * @brief Revert to initial state, as though the metronome had never been
+   *        polled.
+   */
+  float reset();
 };
 
 } // end namespace photic
