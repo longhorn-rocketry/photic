@@ -9,6 +9,8 @@
 #include "../telemetry/heap.h"
 #include "../telemetry/history.h"
 
+#define CLEANUP(ptr) if (ptr) { delete ptr; ptr = nullptr; }
+
 enum PhoticConfigParameter {
   // Ignition detection
   ROCKET_IGNITION_G_TRIGGER,
@@ -111,9 +113,9 @@ extern MicrocontrollerModel microcontroller_model;
 void start();
 
 /**
- * Resets the flight (events, times, etc.).
+ * Resets flight and time flags. Configuration remains untouched.
  */
-void restart();
+void reset();
 
 /**
  * @brief Gets the time since photic epoch (negative if not yet initialized).

@@ -48,17 +48,17 @@ void start() {
 
   has_initialized = true;
   t_epoch = timekeeper->time();
+}
+
+void reset() {
+  has_initialized = false;
+  t_epoch = -1;
   t_ignition = -1;
   t_burnout = -1;
   t_apogee = -1;
-  event_ignition;
+  event_ignition = false;
   event_burnout = false;
   event_apogee = false;
-}
-
-void restart() {
-  has_initialized = false;
-  start();
 }
 
 float rocket_time() {
