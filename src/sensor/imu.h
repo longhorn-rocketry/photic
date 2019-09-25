@@ -9,7 +9,7 @@ struct ImuData {
 	float mx, my, mz; // 3-axis magnetic field strength
 };
 
-/*
+/**
  * An abstract IMU wrapper to be derived by the client and specialized for
  * their barometer model and wire mappings.
  */

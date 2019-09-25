@@ -84,7 +84,7 @@ public:
 	 * Adds a new value to the history. If the history is at capacity, the oldest
 	 * value is thrown out.
 	 *
-	 * @param k_t value to add
+	 * @param   k_t value to add
 	 */
 	void add(T k_t) {
 		if (m_data.size() == m_size)

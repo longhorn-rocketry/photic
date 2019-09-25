@@ -58,9 +58,9 @@ protected:
 public:
 	/**
 	 * Creates an empty block.
-	 * @param k_addr_start start address
-	 * @param k_addr_end   end address
-	 * @param k_io         memory handler
+	 * @param   k_addr_start start address
+	 * @param   k_addr_end   end address
+	 * @param   k_io         memory handler
 	 */
 	HeapBlock(unsigned int k_addr_start, unsigned int k_addr_end, HeapIO* k_io);
 
@@ -118,9 +118,10 @@ public:
 
 	/**
 	 * Creates an empty heap.
-	 * @param k_addr_start smallest heap address
-	 * @param k_addr_end   largest heap address
-	 * @param k_io         memory handler
+	 *
+	 * @param   k_addr_start smallest heap address
+	 * @param   k_addr_end   largest heap address
+	 * @param   k_io         memory handler
 	 */
 	TelemetryHeap(unsigned int k_addr_start,
 		            unsigned int k_addr_end,
@@ -134,9 +135,11 @@ public:
 
 	/**
 	 * Defines a region of the heap as a new block and returns a UID for it.
-	 * @param  k_addr_start block start address
-	 * @param  k_addr_end   block end address
-	 * @return              block UID
+	 *
+	 * @param   k_addr_start block start address
+	 * @param   k_addr_end   block end address
+	 *
+	 * @ret     block UID
 	 */
 	unsigned int add_block(unsigned int k_addr_start, unsigned int k_addr_end);
 
@@ -151,7 +154,7 @@ public:
 	 * length get_block_size(k_block_id) bytes, and contain
 	 * get_block_size(k_block_id) / sizeof(T) elements of a given type T.
 	 *
-	 * @param k_block_id UID of block to retrieve
+	 * @param k_block_id   UID of block to retrieve
 	 */
 	void* read_block(block_id_t k_block_id);
 

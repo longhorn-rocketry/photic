@@ -28,8 +28,9 @@ public:
 
   /**
    * Sets the variance in altitude and acceleration readings.
-   * @param k_altimeter_variance     altimeter variance
-   * @param k_accelerometer_variance accelerometer variance
+   *
+   * @param   k_altimeter_variance     altimeter variance
+   * @param   k_accelerometer_variance accelerometer variance
    */
   void set_sensor_variance(float k_altimeter_variance,
                            float k_accelerometer_variance);
@@ -38,9 +39,9 @@ public:
    * Sets the initial state estimate. More often that not, this is just
    * [0, 0, 0].
    *
-   * @param k_s initial altitude
-   * @param k_v initial velocity
-   * @param k_a initial acceleration
+   * @param   k_s initial altitude
+   * @param   k_v initial velocity
+   * @param   k_a initial acceleration
    */
   void set_initial_estimate(float k_s, float k_v, float k_a);
 
@@ -67,10 +68,6 @@ public:
   void compute_kg();
 
   /**
-    @brief sets the Kalman gain; intended for use by low-compute power
-           microcontrollers that would rather load a KG computed offboard
-  */
-  /**
    * @brief Overrides the Kalman gain. Use this if you're precomputing your KG.
    */
   void set_kg(matrix k_kg);
@@ -78,16 +75,18 @@ public:
   /**
     Runs a single filter iteration and returns the new state estimate.
 
-    @param k_s altitude reading
-    @param k_a acceleration reading
-    @return    filtered state
+    @param   k_s altitude reading
+    @param   k_a acceleration reading
+
+    @ret     filtered state
   */
   /**
    * Runs a single filter iteration and returns the new state estimate.
    *
-   * @param  k_s observed altitude
-   * @param  k_a observed acceleration
-   * @return     estimated state
+   * @param k_s   observed altitude
+   * @param k_a   observed acceleration
+   *
+   * @ret         estimated state
    */
   matrix filter(float k_s, float k_a);
 };

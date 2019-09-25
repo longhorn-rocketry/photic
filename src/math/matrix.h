@@ -28,19 +28,11 @@ public:
   Matrix();
 
   /**
-    Creates a matrix and populates it with values.
-
-    @param k_rows row count
-    @param k_cols column count
-    @param k_v0...k_v8 values inserted into the matrix from left to right, top
-           to bottom
-  */
-  /**
    * Creates a matrix and populates it with values.
    *
-   * @param k_rows     row count
-   * @param k_cols     column count
-   * @param k_v0...8   values to insert into the matrix from left to right, top
+   * @param   k_rows   row count
+   * @param   k_cols   column count
+   * @param   k_v0...8 values to insert into the matrix from left to right, top
    *                   to bottom
    */
   Matrix(int k_rows, int k_cols,
@@ -81,9 +73,10 @@ public:
   /**
    * Constant access.
    *
-   * @param  k_r row index
-   * @param  k_c column index
-   * @return     value at row k_r and column k_c
+   * @param   k_r row index
+   * @param   k_c column index
+   *
+   * @ret     value at row k_r and column k_c
    */
   float get(int k_r, int k_c) const;
 
