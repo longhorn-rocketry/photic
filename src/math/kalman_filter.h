@@ -73,14 +73,6 @@ public:
   void set_kg(matrix k_kg);
 
   /**
-    Runs a single filter iteration and returns the new state estimate.
-
-    @param   k_s altitude reading
-    @param   k_a acceleration reading
-
-    @ret     filtered state
-  */
-  /**
    * Runs a single filter iteration and returns the new state estimate.
    *
    * @param k_s   observed altitude

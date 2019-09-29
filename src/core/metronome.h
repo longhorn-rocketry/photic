@@ -23,11 +23,6 @@ public:
   Metronome(float k_freq);
 
   /**
-    Gets if the metronome has ticked. The first poll call is always a tick.
-
-    @param k_t current time in seconds
-  */
-  /**
    * Gets if the metronome has ticked. The first poll call is always a tick.
    *
    * @param k_t current time in seconds
