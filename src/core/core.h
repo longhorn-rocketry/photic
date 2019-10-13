@@ -120,12 +120,40 @@ void reset();
 /**
  * @brief Gets the time since photic epoch (negative if not yet initialized).
  */
-float rocket_time();
+inline float rocket_time() {
+  return timekeeper->time() - t_epoch;
+}
 
 /**
  * @brief Gets the time since ignition detection (negative if not yet detected).
  */
-float flight_time();
+inline float flight_time() {
+  return timekeeper->time() - t_ignition;
+}
+
+/**
+ * @brief Gets the rocket time of liftoff detection (negative if not yet
+ *        detected).
+ */
+inline float liftoff_time() {
+  return t_ignition;
+}
+
+/**
+ * @brief Gets the flight time of burnout detection (negative if not yet
+ *        detected).
+ */
+inline float burnout_time() {
+  return t_burnout;
+}
+
+/**
+ * @brief Gets the flight time of apogee detection (negative if not yet
+ *        detected).
+ */
+inline float apogee_time() {
+  return t_apogee;
+}
 
 /**
  * @brief Configures integral photic parameters.

@@ -61,14 +61,6 @@ void reset() {
   event_apogee = false;
 }
 
-float rocket_time() {
-  return timekeeper->time() - t_epoch;
-}
-
-float flight_time() {
-  return timekeeper->time() - t_ignition;
-}
-
 bool config(PhoticConfigParameter k_param, double k_val) {
   if (k_param == ROCKET_IGNITION_G_TRIGGER)
     ignition_g_trigger = k_val;
@@ -164,7 +156,7 @@ bool check_for_liftoff() {
 
     if (detected && !event_ignition) {
       event_ignition = true;
-      t_ignition = timekeeper->time();
+      t_ignition = rocket_time();
     }
   }
 
@@ -192,7 +184,7 @@ bool check_for_burnout() {
 
   if (detected && !event_burnout) {
     event_burnout = true;
-    t_burnout = timekeeper->time();
+    t_burnout = flight_time();
   }
 
   return event_burnout;
@@ -216,7 +208,7 @@ bool check_for_apogee() {
 
   if (detected && !event_apogee) {
     event_apogee = true;
-    t_apogee = timekeeper->time();
+    t_apogee = flight_time();
   }
 
   return event_apogee;
