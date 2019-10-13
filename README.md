@@ -46,7 +46,7 @@ Here, we block until a rolling average of accelerometer readings passes the G
 trigger (and the no-ignition grace period is enforced automatically).
 
 ```cpp
-history<float> vertical_accel_history(10); // Rolling average of 10 values
+photic::history<float> vertical_accel_history(10); // Rolling average of 10 values
 photic::config(ROCKET_VERTICAL_ACCEL_HISTORY, &vertical_accel_history);
 
 do {
@@ -94,4 +94,6 @@ Alternatively, zip the repository and import it in Arduino IDE via `Sketch > Inc
 
 ---
 
-Maintained by the experimental branch of the [Longhorn Rocketry Association](http://www.longhornrocketry.org/) of the University of Texas at Austin.
+### Maintainers
+
+Maintained by the Experimental branch of the [Longhorn Rocketry Association](http://www.longhornrocketry.org/) at the University of Texas at Austin.
