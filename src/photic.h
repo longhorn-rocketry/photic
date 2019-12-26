@@ -1,18 +1,21 @@
 #ifndef PHOTIC
 #define PHOTIC
 
-#include "core/core.h"
-#include "core/metronome.h"
+#include "gnc/kfilter.h"
 
-#include "math/kalman_filter.h"
 #include "math/matrix.h"
-#include "math/rocket_math.h"
+#include "math/rocketmath.h"
 
-#include "sensor/imu.h"
-#include "sensor/barometer.h"
-#include "sensor/BMP085_barometer.h"
+#include "model/stdatmos.h"
 
-#include "telemetry/arduino_heap.h"
-#include "telemetry/history.h"
+#include "platform/barometer.h"
+#include "platform/device.h"
+#include "platform/imu.h"
+#include "platform/statemachine.h"
+
+#include "util/float16.h"
+#include "util/history.h"
+#include "util/metronome.h"
+#include "util/structutil.h"
 
 #endif
