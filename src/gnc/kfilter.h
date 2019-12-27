@@ -24,7 +24,7 @@
 
 #include <stdint.h>
 
-#include "matrix.h"
+#include "math/matrix.h"
 
 namespace photic
 {

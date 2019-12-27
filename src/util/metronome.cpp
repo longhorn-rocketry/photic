@@ -1,4 +1,4 @@
-#include "metronome.h"
+#include "util/metronome.h"
 
 namespace photic
 {

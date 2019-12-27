@@ -1,8 +1,8 @@
 #include <stddef.h>
 
-#include "rocketmath.h"
-#include "stdatmos.h"
-#include "structutil.h"
+#include "math/rocketmath.h"
+#include "model/stdatmos.h"
+#include "util/structutil.h"
 
 namespace photic
 {

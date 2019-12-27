@@ -6,7 +6,7 @@
 
 #include <stdint.h>
 
-#include "float16.h"
+#include "util/float16.h"
 
 namespace photic
 {

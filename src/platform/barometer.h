@@ -5,7 +5,7 @@
 #ifndef PHOTIC_PLATFORM_BAROMETER_H
 #define PHOTIC_PLATFORM_BAROMETER_H
 
-#include "device.h"
+#include "platform/device.h"
 
 namespace photic
 {

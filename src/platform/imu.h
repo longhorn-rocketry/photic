@@ -5,7 +5,7 @@
 #ifndef PHOTIC_PLATFORM_IMU_H
 #define PHOTIC_PLATFORM_IMU_H
 
-#include "device.h"
+#include "platform/device.h"
 
 namespace photic
 {

@@ -1,7 +1,7 @@
 #include <math.h>
 
-#include "matrix.h"
-#include "rocketmath.h"
+#include "math/matrix.h"
+#include "math/rocketmath.h"
 
 namespace photic
 {

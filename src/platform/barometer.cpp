@@ -1,6 +1,6 @@
 #include <string.h>
 
-#include "barometer.h"
+#include "platform/barometer.h"
 
 namespace photic
 {

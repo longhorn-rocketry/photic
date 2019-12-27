@@ -1,4 +1,4 @@
-#include "rocketmath.h"
+#include "math/rocketmath.h"
 
 namespace photic
 {

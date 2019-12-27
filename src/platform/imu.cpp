@@ -1,6 +1,6 @@
 #include <string.h>
 
-#include "imu.h"
+#include "platform/imu.h"
 
 namespace photic
 {

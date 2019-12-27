@@ -1,4 +1,4 @@
-#include "kfilter.h"
+#include "gnc/kfilter.h"
 
 namespace photic
 {
