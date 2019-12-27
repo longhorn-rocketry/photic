@@ -11,10 +11,17 @@ namespace photic
 {
 
 /**
+ * Acceleration due to gravity at sea level (m/sec/sec).
+ */
+const float EARTH_SLGRAV_MPSSQ = 9.81;
+
+/**
  * Gets if two numbers are approximately equal.
  *
- * @param   k_a LHS.
- * @param   k_b RHS.
+ * @param   k_a          LHS.
+ * @param   k_b          RHS.
+ * @param   k_negligence Maximum absolute difference between k_a and k_b to
+ *                       declare them approximately equal.
  *
  * @ret     True if k_a is approximately k_b, false otherwise.
  */
@@ -46,9 +53,9 @@ float igl_density(float k_p, float k_t);
  *
  * @param   k_lower Lower value.
  * @param   k_upper Upper value.
- * @param   k_p     Interpolation percentage, probability between 0 and 1.
+ * @param   k_p     Interpolation percentage, probably between 0 and 1.
  *
- * @ret     Interpolated value.
+ * @ret     Interpolated value of the same type as the parameters.
  */
 template <typename T>
 T lerp(T k_lower, T k_upper, double k_p)
