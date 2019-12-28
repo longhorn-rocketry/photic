@@ -13,7 +13,7 @@ namespace photic
 /**
  * Acceleration due to gravity at sea level (m/sec/sec).
  */
-const float EARTH_SLGRAV_MPSSQ = 9.81;
+const float EARTH_SLGRAV_MPSSQ = 9.80665;
 
 /**
  * Gets if two numbers are approximately equal.
