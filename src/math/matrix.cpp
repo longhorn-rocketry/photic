@@ -96,7 +96,8 @@ Matrix operator+(const Matrix& k_a, const Matrix& k_b)
     return sum;
 }
 
-Matrix operator-(const Matrix& k_a, const Matrix& k_b) {
+Matrix operator-(const Matrix& k_a, const Matrix& k_b)
+{
     if (k_a.m_rows != k_b.m_rows || k_a.m_cols != k_b.m_cols)
     {
         return NULLMAT;
@@ -115,7 +116,8 @@ Matrix operator-(const Matrix& k_a, const Matrix& k_b) {
     return diff;
 }
 
-Matrix operator*(const Matrix& k_a, const Matrix& k_b) {
+Matrix operator*(const Matrix& k_a, const Matrix& k_b)
+{
     if (k_a.m_cols != k_b.m_rows)
     {
         return NULLMAT;

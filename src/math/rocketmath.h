@@ -20,6 +20,11 @@ const float EARTH_SLGRAV_MPSSQ = 9.80665;
 const float EARTH_SLMACH_MPS = 343;
 
 /**
+ * Speed of sound at Earth sea level (m/sec).
+ */
+const float EARTH_SLMACH_MPS = 343;
+
+/**
  * Gets if two numbers are approximately equal.
  *
  * @param   k_a          LHS.

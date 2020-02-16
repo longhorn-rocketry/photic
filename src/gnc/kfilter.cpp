@@ -62,7 +62,8 @@ void KalmanFilter::compute_kg(uint32_t k_iterations)
     }
 }
 
-void KalmanFilter::compute_kg() {
+void KalmanFilter::compute_kg()
+{
     m_K = m_P * m_H.t() * (m_H * m_P * m_H.t() + m_R).inv();
     matrix ident(3, 3,
         1, 0, 0,
@@ -73,11 +74,13 @@ void KalmanFilter::compute_kg() {
     m_P = m_A * m_P * m_A.t() + m_Q;
 }
 
-void KalmanFilter::set_kg(matrix k_kg) {
+void KalmanFilter::set_kg(matrix k_kg)
+{
     m_K = k_kg;
 }
 
-matrix KalmanFilter::filter(float k_s, float k_a) {
+matrix KalmanFilter::filter(float k_s, float k_a)
+{
     matrix observation(2, 1, k_s, k_a);
     matrix estimate_new = m_A * m_estimate;
     matrix estimate_new_f = estimate_new + m_K *
