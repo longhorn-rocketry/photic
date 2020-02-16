@@ -1,12 +1,12 @@
 ![photic](https://stefandebruyn.github.io/assets/images/photic-banner.png)
 
-## Semper Fi, Aim High
+## Photic
 
 Photic is a flight-proven toolbox for building high-power rocket flight computer
 software. It was created in the interest of bringing power and elegance
 to what is an oft-overlooked aspect of high-power rocket development.
 
-This library conforms to the Arduino library specification, but is abstract
+This library conforms to the Arduino library specification but is abstract
 enough that it can fit into any C++ stack.
 
 ---
