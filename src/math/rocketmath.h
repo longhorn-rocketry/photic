@@ -11,9 +11,13 @@ namespace photic
 {
 
 /**
- * Acceleration due to gravity at sea level (m/sec/sec).
+ * Acceleration due to gravity at Earth sea level (m/sec/sec).
  */
 const float EARTH_SLGRAV_MPSSQ = 9.80665;
+/**
+ * Speed of sound at Earth sea level (m/sec).
+ */
+const float EARTH_SLMACH_MPS = 343;
 
 /**
  * Gets if two numbers are approximately equal.

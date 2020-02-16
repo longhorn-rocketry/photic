@@ -2,8 +2,8 @@
  * Abstraction for a device within the flight computer system. Sensors,
  * actuators, and controllers are all devices.
  */
-#ifndef PHOTIC_PLATFRORM_DEVICE_H
-#define PHOTIC_PLATFRORM_DEVICE_H
+#ifndef PHOTIC_PLATFORM_DEVICE_H
+#define PHOTIC_PLATFORM_DEVICE_H
 
 namespace photic
 {
