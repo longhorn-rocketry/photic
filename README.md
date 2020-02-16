@@ -1,6 +1,6 @@
 ![photic](https://stefandebruyn.github.io/assets/images/photic-banner.png)
 
-> Semper fi, aim high.
+## Semper Fi, Aim High
 
 Photic is a flight-proven toolbox for building high-power rocket flight computer
 software. It was created in the interest of bringing power and elegance
