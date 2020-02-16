@@ -20,6 +20,7 @@ enough that it can fit into any C++ stack.
 - [ ] Utilities for converting linalg objects to/from Adafruit's `imu` namespace
   - First there was light. And then there was the BNO055.
 - [x] `rocketmath` module with common formulas and math utilities
+- [x] US Standard Atmosphere model
 - [x] `Device` interface (a simple HA layer) encourages simulation integration
 - [ ] `StateMachine` removes redundant if-else statekeeping logic
 - [x] 16-bit float compression increases telemetry storage density
