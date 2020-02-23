@@ -5,6 +5,7 @@
 #ifndef PHOTIC_PLATFORM_IMU_H
 #define PHOTIC_PLATFORM_IMU_H
 
+#include "math/matrix.h"
 #include "platform/device.h"
 
 namespace photic
@@ -14,7 +15,7 @@ class Imu : public Device
 {
 public:
     /**
-     * The common 9 IMU DoFs.
+     * Common IMU data.
      */
     typedef struct Data
     {
@@ -28,9 +29,17 @@ public:
         /**
          * Gyroscope readings.
          */
-        float gyro_r;
-        float gyro_p;
+        float gyro_x;
         float gyro_y;
+        float gyro_z;
+
+        /**
+         * Quaternion orientation.
+         */
+        float quat_w;
+        float quat_x;
+        float quat_y;
+        float quat_z;
 
         /**
          * Magnetometer readings.
@@ -38,10 +47,15 @@ public:
         float mag_x;
         float mag_y;
         float mag_z;
+
+        /**
+         * Some IMUs also measure temperature for some reason.
+         */
+        float temp;
     } Data_t;
 
     /**
-     * Zeros out m_data.
+     * Member data is initially zeroed-out.
      */
     Imu();
 
@@ -66,6 +80,43 @@ public:
      * @ret     Most recent sensor readings.
      */
     Data_t data();
+
+    /**
+     * Returns a 3x1 matrix with the last measured acceleration vector
+     * <x, y, z>.
+     *
+     * @ret     Acceleration vector.
+     */
+    matrix accel();
+
+    /**
+     * Returns a 3x1 matrix with the last measured gyroscope angles <x, y, z>.
+     *
+     * @ret     Gyroscope angles.
+     */
+    matrix gyro();
+
+    /**
+     * Returns the last measured quaternion orientation.
+     *
+     * @ret     Quaternion orientation.
+     */
+    matrix quat();
+
+    /**
+     * Returns a 3x1 matrix with the last measured magnetic field vector
+     * <x, y, z>.
+     *
+     * @ret     Magnetic field vector.
+     */
+    matrix mag();
+
+    /**
+     * Returns the last measured temperature.
+     *
+     * @ret     Temperature.
+     */
+    float temp();
 
 protected:
     /**
