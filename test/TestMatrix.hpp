@@ -74,6 +74,25 @@ void testMatrixAddition ()
 }
 
 /**
+ * Tests the matrix subtraction operation.
+ */
+void testMatrixSubtraction ()
+{
+    TEST_DEFINE ("MatrixSubtraction");
+
+    // Check that a matrix plus its negation is the zero matrix. All elements in
+    // this matrix are unique, so this is a thorough enough exercise of the
+    // subtraction algorithm.
+    Matrix<3, 3> mat0 = MatrixUtils::make3x3 (1, 2, 3,
+                                              4, 5, 7,
+                                              7, 8, 9);
+    Matrix<3, 3> mat1 = mat0;
+    Matrix<3, 3> mat2 = mat0 - mat1;
+    Matrix<3, 3> mat3 (0);
+    CHECK_TRUE (mat2 == mat3);
+}
+
+/**
  * Tests the matrix multiplication operation.
  */
 void testMatrixMultiplication ()
@@ -186,16 +205,59 @@ void testMatrixVectorConstructAccessMutate ()
 }
 
 /**
+ * Tests matrix transposition.
+ */
+void testMatrixTranspose ()
+{
+    TEST_DEFINE ("MatrixTranspose");
+
+    // Another egregiously weak test case. Sue me.
+    Matrix<2, 3> mat0;
+    mat0 (0, 0) = 1;
+    mat0 (0, 1) = 2;
+    mat0 (0, 2) = 3;
+    mat0 (1, 0) = 4;
+    mat0 (1, 1) = 5;
+    mat0 (1, 2) = 6;
+
+    Matrix<3, 2> mat1 = mat0.transpose ();
+    CHECK_EQUAL (mat1 (0, 0), 1);
+    CHECK_EQUAL (mat1 (0, 1), 4);
+    CHECK_EQUAL (mat1 (1, 0), 2);
+    CHECK_EQUAL (mat1 (1, 1), 5);
+    CHECK_EQUAL (mat1 (2, 0), 3);
+    CHECK_EQUAL (mat1 (2, 1), 6);
+}
+
+/**
+ * Tests inverting a 2x2 matrix.
+ */
+void testMatrixInvert2x2 ()
+{
+    TEST_DEFINE ("MatrixInvert2x2");
+
+    Matrix<2, 2> mat0 = MatrixUtils::make2x2 ( 1, 11,
+                                              -7, 25);
+    Matrix<2, 2> mat1 = MatrixUtils::make2x2 (25.0 / 102, -11.0 / 102,
+                                               7.0 / 102,   1.0 / 102);
+    Matrix<2, 2> mat2 = MatrixUtils::invert2x2 (mat0);
+    CHECK_TRUE (mat2 == mat1);
+}
+
+/**
  * Entry point for matrix tests.
  */
 void test ()
 {
     testMatrixConstructAccessMutate ();
     testMatrixAddition ();
+    testMatrixSubtraction ();
     testMatrixEquation ();
     testMatrixMultiplication ();
     testMatrixUtilsMatrixConstruction ();
     testMatrixVectorConstructAccessMutate ();
+    testMatrixTranspose ();
+    testMatrixInvert2x2 ();
 }
 
 } // namespace TestMatrix

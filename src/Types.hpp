@@ -9,7 +9,7 @@ namespace Photic
 {
 
 /**
- * cstdint-style numeric types.
+ * cstdint numeric types.
  */
 typedef char               int8_t;
 typedef unsigned char      uint8_t;
@@ -34,6 +34,12 @@ typedef float Real_t;
  * large data structures.
  */
 typedef uint8_t Dim_t;
+
+/**
+ * Represents the size of some structure. We again avoid quadword types for
+ * reasons of efficiency and necessity.
+ */
+typedef uint32_t Size_t;
 
 } // namespace Photic
 

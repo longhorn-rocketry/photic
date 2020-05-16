@@ -3,8 +3,11 @@ make test:
 	-I../src \
 	../src/Matrix.hpp \
 	../src/Types.hpp \
+	../src/KalmanFilter.hpp \
+	../src/KalmanFilter.cpp \
 	TestMacros.hpp \
 	TestMatrix.hpp \
+	TestKalmanFilter.hpp \
 
 make clean:
 	rm TestMain

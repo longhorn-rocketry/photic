@@ -35,7 +35,7 @@
  *
  * @ret     Index in array.
  */
-#define ELEM_IDX(kRow, kCol) (T_Rows * kRow + kCol)
+#define ELEM_IDX(kRow, kCol) (T_Cols * kRow + kCol)
 
 namespace Photic
 {
@@ -87,7 +87,7 @@ public:
      */
     void fill (const Real_t kFill)
     {
-        for (Dim_t i = 0; i < ELEM_COUNT; i++)
+        for (Size_t i = 0; i < ELEM_COUNT; i++)
         {
             mData[i] = kFill;
         }
@@ -148,7 +148,7 @@ public:
     }
 
     /**
-     * Computes the sum of two matrices. Enables equations like a = b + c.
+     * Computes this matrix plus another. Enables equations like a = b + c.
      *
      * @param   kRhs RHS matrix.
      *
@@ -161,6 +161,25 @@ public:
         for (Dim_t i = 0; i < ELEM_COUNT; i++)
         {
             mat.mData[i] += kRhs.mData[i];
+        }
+
+        return mat;
+    }
+
+    /**
+     * Computes this matrix minus another. Enables equations like a = b - c.
+     *
+     * @param   kRhs RHS matrix.
+     *
+     * @ret     This matrix minus the RHS.
+     */
+    Matrix<T_Rows, T_Cols> operator- (const Matrix<T_Rows, T_Cols>& kRhs) const
+    {
+        Matrix<T_Rows, T_Cols> mat = *this;
+
+        for (Dim_t i = 0; i < ELEM_COUNT; i++)
+        {
+            mat.mData[i] -= kRhs.mData[i];
         }
 
         return mat;
@@ -192,11 +211,10 @@ public:
 
                 for (Dim_t k = 0; k < T_Cols; k++)
                 {
-                    elem += mData[ELEM_IDX (i, k)] *
-                            kRhs.mData[ELEM_IDX (k, j)];
+                    elem += mData[ELEM_IDX (i, k)] * kRhs (k, j);
                 }
 
-                mat.mData[ELEM_IDX (i, j)] = elem;
+                mat (i, j) = elem;
             }
         }
 
@@ -215,6 +233,26 @@ public:
     {
         // Types are the same, so can compare element buffers directly.
         return memcmp (mData, kRhs.mData, sizeof (mData)) == 0;
+    }
+
+    /**
+     * Gets the transpose of this matrix.
+     *
+     * @ret     Transpose.
+     */
+    Matrix<T_Cols, T_Rows> transpose () const
+    {
+        Matrix<T_Cols, T_Rows> mat;
+
+        for (Dim_t i = 0; i < T_Rows; i++)
+        {
+            for (Dim_t j = 0; j < T_Cols; j++)
+            {
+                mat (j, i) = mData[ELEM_IDX (i, j)];
+            }
+        }
+
+        return mat;
     }
 };
 
@@ -238,8 +276,8 @@ namespace MatrixUtils
      *
      * @ret     Constructed matrix.
      */
-    inline Matrix<2, 2> make2x2 (Real_t e00, Real_t e01,
-                                 Real_t e10, Real_t e11)
+    inline Matrix<2, 2> make2x2 (const Real_t e00, const Real_t e01,
+                                 const Real_t e10, const Real_t e11)
     {
         Matrix<2, 2> mat;
 
@@ -256,9 +294,9 @@ namespace MatrixUtils
      *
      * @ret     Constructed matrix.
      */
-    inline Matrix<3, 3> make3x3 (Real_t e00, Real_t e01, Real_t e02,
-                                 Real_t e10, Real_t e11, Real_t e12,
-                                 Real_t e20, Real_t e21, Real_t e22)
+    inline Matrix<3, 3> make3x3 (const Real_t e00, const Real_t e01, const Real_t e02,
+                                 const Real_t e10, const Real_t e11, const Real_t e12,
+                                 const Real_t e20, const Real_t e21, const Real_t e22)
     {
         Matrix<3, 3> mat;
 
@@ -277,7 +315,7 @@ namespace MatrixUtils
      *
      * @ret     2-vector (x, y).
      */
-    inline Matrix<2, 1> makeVector2 (Real_t x, Real_t y)
+    inline Matrix<2, 1> makeVector2 (const Real_t x, const Real_t y)
     {
         Matrix<2, 1> mat;
 
@@ -296,7 +334,8 @@ namespace MatrixUtils
      *
      * @ret     3-vector (x, y, z).
      */
-    inline Matrix<3, 1> makeVector3 (Real_t x, Real_t y, Real_t z)
+    inline Matrix<3, 1> makeVector3 (const Real_t x, const Real_t y,
+                                     const Real_t z)
     {
         Matrix<3, 1> mat;
 
@@ -305,6 +344,14 @@ namespace MatrixUtils
         mat.mData[2] = z;
 
         return mat;
+    }
+
+    inline Matrix<2, 2> invert2x2 (const Matrix<2, 2>& kMat)
+    {
+        Real_t determinant = kMat (0, 0) * kMat (1, 1) -
+                             kMat (0, 1) * kMat (1, 0);
+        return make2x2 ( kMat (1, 1) / determinant, -kMat (0, 1) / determinant,
+                        -kMat (1, 0) / determinant,  kMat (0, 0) / determinant);
     }
 
 } // namespace MatrixUtils

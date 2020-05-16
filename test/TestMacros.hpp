@@ -5,8 +5,10 @@
  *
  *   (1) A Test is a function which tests a related set of functions. Every
  *       Test begins with the TEST_DEFINE macro.
+ *
  *   (2) Tests employ Checks to verify observed behavior against expected
  *       behavior. Checks are performed with CHECK_XXX macros.
+ *
  *   (3) A Suite is a collection of Tests. A suite begins with the SUITE_START
  *       macro, calls all of its Test functions, and then concludes with the
  *       SUITE_END macro.
@@ -63,7 +65,7 @@ int gTestFails  = 0;
 #define CHECK_TRUE(kExpr)                                                      \
     if (!(kExpr))                                                              \
     {                                                                          \
-        PRINTF ("CHECK_TRUE failure in %s");                                   \
+        PRINTF ("CHECK_TRUE failure in %s\n", TEST_NAME);                      \
         gTestFails++;                                                          \
     }                                                                          \
     else                                                                       \
