@@ -6,7 +6,9 @@
  *                              ---- USAGE ----
  *
  *   (1) Extend IMUInterface into a child class that will act as the driver for
- *       your specific IMU, e.g. class BNO055IMU final : public IMUInterface.
+ *       your specific IMU, e.g.
+ *       
+ *         class BNO055IMU final : public Photic::IMUInterface
  *
  *   (2) Implement the init function. This function performs one-time setup
  *       logic, e.g. connecting to the sensor and setting calibration values.

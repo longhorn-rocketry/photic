@@ -7,6 +7,8 @@ make test:
 	../src/KalmanFilter.cpp \
 	../src/IMUInterface.hpp \
 	../src/IMUInterface.cpp \
+	../src/BarometerInterface.hpp \
+	../src/BarometerInterface.cpp \
 	TestMacros.hpp \
 	TestMatrix.hpp \
 	TestKalmanFilter.hpp \
