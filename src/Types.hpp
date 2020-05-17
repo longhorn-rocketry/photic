@@ -45,6 +45,11 @@ typedef uint8_t Dim_t;
  * utilities which use time (e.g. Metronome, KalmanFilter) are agnostic of
  * whether this type is floating point or integral. (Note that an integral
  * Time_t will fail the Metronome unit tests.)
+ *
+ * Note that Photic::KalmanFilter places Time_t values into Photic::Matrix
+ * objects which store Real_t contents. When changing Time_t, take care that
+ * KalmanFilter does not overflow or lose precision. This goes for any functions
+ * which use Time_t in combination with Real_t.
  */
 typedef Real_t Time_t;
 

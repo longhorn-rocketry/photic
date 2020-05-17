@@ -33,7 +33,7 @@ KalmanFilter::KalmanFilter ()
                                0, 0, 1);
 }
 
-void KalmanFilter::setDeltaT (const Real_t kDt)
+void KalmanFilter::setDeltaT (const Time_t kDt)
 {
     mA (0, 1) = kDt;
     mA (0, 2) = 0.5 * kDt * kDt;

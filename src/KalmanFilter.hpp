@@ -124,7 +124,7 @@ public:
      *
      * @param   kDt Timestep size.
      */
-    void setDeltaT (const Real_t kDt);
+    void setDeltaT (const Time_t kDt);
 
     /**
      * Sets the variance in altitude and acceleration readings.
