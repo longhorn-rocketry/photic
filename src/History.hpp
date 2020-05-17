@@ -109,7 +109,7 @@ public:
      *
      * @param   kData New element.
      */
-    void add (Real_t kData)
+    void add (const Real_t kData)
     {
         mData[mIdx++] = kData;
 
