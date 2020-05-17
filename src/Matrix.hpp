@@ -191,7 +191,7 @@ public:
      * NOTE: This uses the naive O(n^3) algorithm. The next best algorithm
      * (Strassen's) only becomes advantageous around n=100 or so. This is
      * technically within the bounds of Dim_t, but if you're multiplying 100x100
-     * matrices in flight, you need to contact me and tell me wtf you're doing.
+     * matrices in flight, I'd really like to hear wtf you're doing.
      *
      * @param   kRhs RHS matrix.
      *
@@ -260,6 +260,7 @@ public:
  */
 typedef Matrix<2, 1> Vector2_t;
 typedef Matrix<3, 1> Vector3_t;
+typedef Matrix<4, 1> Vector4_t;
 
 /******************************* MATRIX UTILS *********************************/
 

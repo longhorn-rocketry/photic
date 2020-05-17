@@ -2,6 +2,7 @@
 
 #include "TestMatrix.hpp"
 #include "TestKalmanFilter.hpp"
+#include "TestIMUInterface.hpp"
 
 int main (int ac, char** av)
 {
@@ -9,6 +10,7 @@ int main (int ac, char** av)
 
     TestMatrix::test ();
     TestKalmanFilter::test ();
+    TestIMUInterface::test ();
 
     SUITE_END;
 }

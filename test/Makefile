@@ -5,6 +5,8 @@ make test:
 	../src/Types.hpp \
 	../src/KalmanFilter.hpp \
 	../src/KalmanFilter.cpp \
+	../src/IMUInterface.hpp \
+	../src/IMUInterface.cpp \
 	TestMacros.hpp \
 	TestMatrix.hpp \
 	TestKalmanFilter.hpp \
