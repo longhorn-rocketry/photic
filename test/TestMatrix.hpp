@@ -135,7 +135,7 @@ void testMatrixEquation ()
 
     // Zero each element of the LHS individually and check that this
     // causes it to become unequal to the RHS.
-    for (Size_t i = 0; i < 9; i++)
+    for (uint32_t i = 0; i < 9; i++)
     {
         Matrix<3, 3> mat2 = mat1;
         mat2.mData[i] = 0;

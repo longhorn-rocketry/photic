@@ -35,12 +35,6 @@ typedef float Real_t;
  */
 typedef uint8_t Dim_t;
 
-/**
- * Represents the size of some structure. We again avoid quadword types for
- * reasons of efficiency and necessity.
- */
-typedef uint32_t Size_t;
-
 } // namespace Photic
 
 #endif

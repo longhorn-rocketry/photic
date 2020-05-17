@@ -87,7 +87,7 @@ public:
      */
     void fill (const Real_t kFill)
     {
-        for (Size_t i = 0; i < ELEM_COUNT; i++)
+        for (uint32_t i = 0; i < ELEM_COUNT; i++)
         {
             mData[i] = kFill;
         }
@@ -198,8 +198,7 @@ public:
      * @ret     This matrix times the RHS.
      */
     template <Dim_t T_RhsCols>
-    Matrix<T_Rows, T_RhsCols>
-    operator* (const Matrix<T_Cols, T_RhsCols>& kRhs) const
+    Matrix<T_Rows, T_RhsCols> operator* (const Matrix<T_Cols, T_RhsCols>& kRhs) const
     {
         Matrix<T_Rows, T_RhsCols> mat;
 
@@ -265,7 +264,7 @@ typedef Matrix<3, 1> Vector3_t;
 /******************************* MATRIX UTILS *********************************/
 
 /**
- * Miscallaneous supporting utilities for Matrix.
+ * Miscellaneous supporting utilities for Matrix.
  */
 namespace MatrixUtils
 {
