@@ -3,6 +3,7 @@
 #include "TestIMUInterface.hpp"
 #include "TestBarometerInterface.hpp"
 #include "TestHistory.hpp"
+#include "TestMetronome.hpp"
 
 int main (int ac, char** av)
 {
@@ -13,6 +14,7 @@ int main (int ac, char** av)
     TestIMUInterface::test ();
     TestBarometerInterface::test ();
     TestHistory::test ();
+    TestMetronome::test ();
 
     // Tests that rely on specific STL components that may or may not be
     // available on the target platform.

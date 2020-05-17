@@ -31,9 +31,22 @@ typedef float Real_t;
 /**
  * Represents the dimension of an indexed structure, e.g. list, matrix. A single
  * byte is sufficient for this, since high power software typically doesn't use
- * large data structures.
+ * large data structures (more than 255 elements, in this case).
  */
 typedef uint8_t Dim_t;
+
+/**
+ * Represents a time value. We default this to a real number since most rate
+ * sensors report values in units per second, so it is most most convenient to
+ * represent time as a floating point number of seconds.
+ *
+ * For users who prefer a different format, e.g. an integer number of milli or
+ * nanoseconds, this type may be safely changed to support this. Photic
+ * utilities which use time (e.g. Metronome, KalmanFilter) are agnostic of
+ * whether this type is floating point or integral. (Note that an integral
+ * Time_t will fail the Metronome unit tests.)
+ */
+typedef Real_t Time_t;
 
 } // namespace Photic
 
