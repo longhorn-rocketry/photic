@@ -1,5 +1,5 @@
 /**
- * Minimalist unit test API with zero dependencies.
+ * Minimalist unit test API with minimal dependencies.
  *
  * USAGE:
  *
@@ -21,6 +21,8 @@
 
 #ifndef TEST_MACROS_HPP
 #define TEST_MACROS_HPP
+
+#include <math.h>
 
 #include "TestOutput.hpp"
 
@@ -66,6 +68,24 @@ int gTestFails  = 0;
     if (!(kExpr))                                                              \
     {                                                                          \
         PRINTF ("CHECK_TRUE failure in %s\n", TEST_NAME);                      \
+        gTestFails++;                                                          \
+    }                                                                          \
+    else                                                                       \
+    {                                                                          \
+        gTestPasses++;                                                         \
+    }
+
+/**
+ * Checks that two numbers are approximately equal.
+ *
+ * @param   kLhs     LHS number.
+ * @param   kRhs     RHS number.
+ * @param   kEpsilon Maximum allowed difference between LHS and RHS.
+ */
+#define CHECK_APPROX(kLhs, kRhs, kEpsilon)                                     \
+    if (fabs (kLhs - kRhs) > kEpsilon)                                         \
+    {                                                                          \
+        PRINTF ("CHECK_APPROX failure in %s\n", TEST_NAME);                    \
         gTestFails++;                                                          \
     }                                                                          \
     else                                                                       \
