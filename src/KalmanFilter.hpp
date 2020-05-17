@@ -6,32 +6,6 @@
  * Based on "Digital Detection of Rocket Apogee" by Dougal, Kwok, and Luckett:
  * http://cnx.org/content/col11599/1.1/
  *
- *                              ---- NOTES ----
- *
- * This filter has been used extensively in simulated and real high power
- * flights. Some observations of its behavior and performance:
- *
- *   (1) The filter responds poorly to dramatic changes in the update vector,
- *       likely because the covariance matrix does not change. This is most
- *       notable during periods of high jerk, e.g. liftoff and motor burnout.
- *       Following burnout, it may take the filter several seconds to drive
- *       the error back to (near) zero.
- *
- *   (2) The rate at which error is driven to zero is greatly dependent on the
- *       number of iterations in the Kalman gain calculation. This number may
- *       need to be tuned somewhat. The corollary to this is that filter
- *       accuracy does not approach perfect as the number of iterations in the
- *       Kalman gain calculation approaches infinity. There is a balance to be
- *       struck.
- *
- *   (3) If there is enough disagreement between the position and acceleration
- *       observations, NaNs may appear in filter estimates. This usually
- *       requires that something very strange happen with a sensor, e.g. inert
- *       air around the barometer is suddenly accelerated into the sensor face
- *       on liftoff, temporarily causing very low altitude readings. This can be
- *       fixed with simple sanity checks on the observations being passed to
- *       the filter, e.g. floor altitude observations at the launchpad altitude.
- *
  *                              ---- USAGE ----
  *
  *   Each of the following instructions are performed once in setup code unless
@@ -99,6 +73,32 @@
  *
  *         // Filter the state (assuming Z is the vertical direction).
  *         Vector3_t rocketState = kf.filter (altitude, worldAccel[2]);
+ *
+ *                              ---- NOTES ----
+ *
+ * This filter has been used extensively in simulated and real high power
+ * flights. Some observations of its behavior and performance:
+ *
+ *   (1) The filter responds poorly to dramatic changes in the update vector,
+ *       likely because the covariance matrix does not change. This is most
+ *       notable during periods of high jerk, e.g. liftoff and motor burnout.
+ *       Following burnout, it may take the filter several seconds to drive
+ *       the error back to (near) zero.
+ *
+ *   (2) The rate at which error is driven to zero is greatly dependent on the
+ *       number of iterations in the Kalman gain calculation. This number may
+ *       need to be tuned somewhat. The corollary to this is that filter
+ *       accuracy does not approach perfect as the number of iterations in the
+ *       Kalman gain calculation approaches infinity. There is a balance to be
+ *       struck.
+ *
+ *   (3) If there is enough disagreement between the position and acceleration
+ *       observations, NaNs may appear in filter estimates. This usually
+ *       requires that something very strange happen with a sensor, e.g. inert
+ *       air around the barometer is suddenly accelerated into the sensor face
+ *       on liftoff, temporarily causing very low altitude readings. This can be
+ *       fixed with simple sanity checks on the observations being passed to
+ *       the filter, e.g. floor altitude observations at the launchpad altitude.
  */
 
 #ifndef PHOTIC_KALMAN_FILTER_HPP
