@@ -16,7 +16,9 @@
 #ifndef PHOTIC_MATRIX_HPP
 #define PHOTIC_MATRIX_HPP
 
-#include <cstring>
+#ifndef ARDUINO
+    #include <cstring>
+#endif
 
 #include "Types.hpp"
 
@@ -74,7 +76,16 @@ public:
      */
     Matrix (const Matrix<T_Rows, T_Cols>& kRhs)
     {
+    #ifndef ARDUINO
         memcpy (mData, kRhs.mData, sizeof (mData));
+    #else
+        // Arduino has no memcpy unfortunately, so we must resort to a manual
+        // copy loop.
+        for (uint32_t i = 0; i < ELEM_COUNT; i++)
+        {
+            mData[i] = kRhs.mData[i];
+        }
+    #endif
     }
 
     /**

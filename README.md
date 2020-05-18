@@ -112,19 +112,13 @@ a Stratologger, a COTS flight computer (data taken from [this flight](https://gi
 
 ## Arduino Installation
 
-Point your terminal at `Arduino/Libraries` and enter
-
-```
-git clone https://github.com/longhorn-rocketry/photic
-```
-
-Alternatively, zip the repository and import it in Arduino IDE via
+Download this repository as a zip and import it in Arduino IDE via
 `Sketch > Include Library > Add .ZIP Library`.
 
 Then, include all of Photic with the following header:
 
 ```c++
-#include "Photic.hpp"
+#include <Photic.hpp>
 ```
 
 
