@@ -2,56 +2,130 @@
 
 ## Photic
 
-Photic is a flight-proven toolbox for building high-power rocket flight computer
-software. It was created in the interest of bringing power and elegance
-to what is an oft-overlooked aspect of high-power rocket development.
+Photic is a collection of utilities for writing high-power rocket flight
+computer software. It was created to bring power and elegance to what is an
+oft-overlooked aspect of high power rocket development.
 
-This library conforms to the Arduino library specification but is abstract
-enough that it can fit into any C++ stack.
-
----
-
-## Features
-
-- [x] 1 DoF `KalmanFilter` fuses sensor data into accurate altitude estimates
-- [x] `Matrix` type and templates like `mat3f`, `mat3d`
-- [ ] `Vector` type (and `vec3f`, `vec2d`, etc.) operable with `Matrix`
-- [ ] `Quaternion` type and spatial orientation maths
-- [ ] Utilities for converting linalg objects to/from Adafruit's `imu` namespace
-  - First there was light. And then there was the BNO055.
-- [x] `rocketmath` module with common formulas and math utilities
-- [x] US Standard Atmosphere model
-- [x] `Device` interface (a simple HA layer) encourages simulation integration
-- [ ] `StateMachine` removes redundant if-else statekeeping logic
-- [x] 16-bit float compression increases telemetry storage density
-- [x] General convenience objects reduce common flight logic patterns
-
-(Unchecked features are still on the way.)
+Photic caters to low-power microprocessors by minimizing its memory footprint
+and external library dependencies. This also makes Photic highly portable. It is
+particularly suitable for Arduino or other embedded environments which lack a
+complete C++ standard library.
 
 ---
 
-## Flight-Proven
+## Design Patterns
 
-Photic has earned its wings! It performed nominally on the following rockets:
+The utilities in Photic can simplify programming patterns commonly seen in
+high-power flight software. Several examples are shown below.
 
-- [Odysseus (Longhorn Rocketry Association, NASA USLI 2020)](https://www.youtube.com/watch?v=fBGkhfvlj6I)
+### Liftoff Detection
 
-If you use Photic and want to see your vehicle here, reach out to us!
+The flight computer must wait for liftoff. Acting on a single accelerometer
+reading would be unwise, so the programmer typically takes a rolling average of
+acceleration readings over a period of time for more robust liftoff detection.
+For this and similar tasks, Photic provides a special capacitated data structure
+called a `History`:
+
+```c++
+Photic::History<100> accelReadings; // Capacity 100
+while (!accelReadings.atCapacity () && accelReadings.getMean () < 30) // ~3 Gs
+{
+    imu.run ();
+    accelReadings.add (imu.getVerticalAcceleration ());
+}
+```
+
+### Sensor Interfaces
+
+Hardware-in-the-loop and hardware-out-of-the-loop simulation is a powerful tool
+for validating software in flight-like conditions on the ground. These
+simulations are typically very complex and require a way of spoofing sensor
+readings for consumption by the flight software. Photic enables this with two
+abstract interfaces--`IMUInterface` and `BarometerInterface`--which standardize
+communication with these sensors.
+
+The programmer can implement different sensor interfaces under this abstraction
+and easily swap between them based on whether the software is running in
+simulation or production, e.g.
+
+```c++
+Photic::IMUInterface* pImu =
+#ifdef HARDWARE_IN_THE_LOOP
+    new SimulationIMUInterface (); // IMU interfaced with simulation
+#else
+    new MyIMUInterface ();         // IMU interfaced with physical sensor
+#endif
+```
+
+### Navigation
+
+This is less of a design pattern and more of a utility.
+
+The rocket's altitude, velocity, and acceleration at a point in time are useful
+for informing control and recovery decisions. However, the rocket's state can
+be difficult to track accurately. In an abominable oversimplification of a
+complex algorithm comparable only to `scikit-learn`, Photic provides
+`RocketTracker`.
+
+`RocketTracker` is a self-calibrating 1-DOF Kalman filter that tracks a rocket's
+vertical state throughout flight. It does this with almost zero user input by
+accessing the rocket's sensors directly through the aforementioned sensor
+interfaces. Usage looks a bit like this:
+
+```c++
+using namespace Photic;
+...
+RocketTracker::Config_t config = RocketTracker::getDefaultConfig ();
+config.pImu = new MyIMUInterface ();
+config.pBarometer = new MyBarometerInterface ();
+RocketTracker tracker (config);
+...
+// Returns <altitude, vertical velocity, vertical acceleration>
+Vector3_t rocketState = tracker.track ();
+```
+
+The navigation filter itself is a standalone class `KalmanFilter` which offers
+greater configurability if `RocketTracker` feels like too much of a black box.
+Usage for each class is thoroughly documented in their respective headers.
+
+The best navigation solution will be highly specialized to the rocket it flies
+on. However, most high-power rockets are similar enough that `RocketTracker`
+will perform admirably if a good 9-DOF IMU and barometer are available. The
+following graph compares a rocket's velocity as estimated by `RocketTracker` and
+a Stratologger, a COTS flight computer (data taken from [this flight](https://github.com/longhorn-rocketry/telemetry-vault/tree/master/sli-odysseus-test-2-8-20)):
+
+<p align="center">
+    <img src="https://stefandebruyn.github.io/assets/images/photic-rockettracker-graph.png">
+</p>
 
 ---
 
-## Installation
+## Other Features
 
-Point your terminal at `Arduino/libraries/` and enter
+* `History` data structure for efficient sensor reading analysis
+* `BarometerInterface` and `IMUInterface` abstract sensor interfaces
+* `RocketTracker` self-calibrating Kalman filter navigation utility
+* `KalmanFilter` for greater navigation configurability for advanced users
+* `Matrix` data structure and supporting `MathUtils` for common GNC math
+
+---
+
+## Arduino Installation
+
+Point your terminal at `Arduino/Libraries` and enter
 
 ```
 git clone https://github.com/longhorn-rocketry/photic
 ```
 
-Alternatively, zip the repository and import it in Arduino IDE via `Sketch > Include Library > Add .ZIP Library...`.
+Alternatively, zip the repository and import it in Arduino IDE via
+`Sketch > Include Library > Add .ZIP Library`.
 
----
+Then, include all of Photic with the following header:
 
-## Maintainers
+```c++
+#include "Photic.hpp"
+```
 
-Developed at the University of Texas at Austin by the [Longhorn Rocketry Association](http://www.longhornrocketry.org/).
+
+### 
