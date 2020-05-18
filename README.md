@@ -94,10 +94,6 @@ will perform admirably if a good 9-DOF IMU and barometer are available. The
 following graph compares a rocket's velocity as estimated by `RocketTracker` and
 a Stratologger, a COTS flight computer (data taken from [this flight](https://github.com/longhorn-rocketry/telemetry-vault/tree/master/sli-odysseus-test-2-8-20)):
 
-<p align="center">
-    <img src="https://stefandebruyn.github.io/assets/images/photic-rockettracker-graph.png">
-</p>
-
 ---
 
 ## Other Features
