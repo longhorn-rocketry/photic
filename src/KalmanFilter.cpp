@@ -4,6 +4,8 @@
 namespace Photic
 {
 
+/***************************** PUBLIC FUNCTIONS *******************************/
+
 KalmanFilter::KalmanFilter ()
 {
     // State transition matrix is initially the identity. The time-variant
@@ -65,6 +67,17 @@ void KalmanFilter::computeKg (const uint32_t kIterations)
     }
 }
 
+Vector3_t KalmanFilter::filter (const Real_t kAlt, const Real_t kAccel)
+{
+    Vector2_t observation = MathUtils::makeVector2 (kAlt, kAccel);
+    Vector3_t estNew = mA * mE;
+    Vector3_t estNewF = estNew + mK * (observation - mH * estNew);
+    mE = estNewF;
+    return mE;
+}
+
+/***************************** PRIVATE FUNCTIONS ******************************/
+
 void KalmanFilter::computeKg ()
 {
     Matrix<2, 2> x = mH * mP * mH.transpose () + mR;
@@ -74,15 +87,6 @@ void KalmanFilter::computeKg ()
                                              0, 0, 1);
     mP = (i - mK * mH) * mP;
     mP = mA * mP * mA.transpose () + mQ;
-}
-
-Vector3_t KalmanFilter::filter (const Real_t kAlt, const Real_t kAccel)
-{
-    Vector2_t observation = MathUtils::makeVector2 (kAlt, kAccel);
-    Vector3_t estNew = mA * mE;
-    Vector3_t estNewF = estNew + mK * (observation - mH * estNew);
-    mE = estNewF;
-    return mE;
 }
 
 } // namespace Photic

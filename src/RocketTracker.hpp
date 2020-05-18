@@ -1,7 +1,7 @@
 /**
  * RocketTracker combines many of Photic's components into one compact
  * navigation utility. It may be used directly in flight software or simply
- * taken as an example of the integrated usage of other objects in the library.
+ * taken as an example of integrated usage of other objects in Photic.
  *
  * RocketTracker uses the following components:
  *
@@ -54,9 +54,7 @@
  *
  *         imu->run ();
  *         barometer->run ();
- *         
  *         ...
- *         
  *         Vector3_t rocketState = tracker.track (false);
  */
 

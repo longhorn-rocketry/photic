@@ -1,7 +1,6 @@
 #include "RocketTracker.hpp"
 #include "History.hpp"
 #include "MathUtils.hpp"
-#include <iostream>
 
 namespace Photic
 {
@@ -27,9 +26,6 @@ RocketTracker::RocketTracker (const Config_t& kConfig) :
     mPBarometer (kConfig.pBarometer),
     mVertAccelIdx (kConfig.vertAccelIdx)
 {
-    // Configure Kalman filter dt.
-    mKf.setDeltaT (kConfig.dt);
-
     // Estimate the launchpad altitude and variance in the rocket's IMU and
     // barometer readings.
     Real_t baroVar = 0;
@@ -37,11 +33,10 @@ RocketTracker::RocketTracker (const Config_t& kConfig) :
     Real_t launchpadAltitude = 0;
     this->profileSensors (baroVar, imuVar, launchpadAltitude);
 
-    // Configure Kalman filter initial state and sensor variance.
+    // Configure the Kalman filter.
+    mKf.setDeltaT (kConfig.dt);
     mKf.setInitialState (launchpadAltitude, 0, 0);
     mKf.setSensorVariance (baroVar, imuVar);
-
-    // Compute Kalman gain.
     mKf.computeKg (kConfig.kgIterations);
 }
 

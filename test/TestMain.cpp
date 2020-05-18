@@ -1,3 +1,7 @@
+/**
+ * Unit test suite entry point.
+ */
+
 #include "TestMatrix.hpp"
 #include "TestMathUtils.hpp"
 #include "TestKalmanFilter.hpp"

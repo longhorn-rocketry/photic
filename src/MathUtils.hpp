@@ -1,5 +1,5 @@
 /**
- * Miscellaneous math utilities used across Photic.
+ * Math utilities used across Photic.
  */
 
 #ifndef PHOTIC_MATH_UTILS_HPP
