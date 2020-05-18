@@ -1,4 +1,13 @@
 /**
+ *                                 [PHOTIC]
+ *                                  v3.2.0
+ *
+ * This file is part of Photic, a collection of utilities for writing high-power
+ * rocket flight computer software. Developed in Austin, TX by the Longhorn
+ * Rocketry Association at the University of Texas at Austin.
+ *
+ *                            ---- THIS FILE ----
+ *
  * 1-DOF Kalman filter designed for high power rocketry applications. Barometric
  * altitude estimate and vertical acceleration reading go in, filtered state
  * <altitude, velocity, acceleration> comes out.

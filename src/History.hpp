@@ -1,4 +1,13 @@
 /**
+ *                                 [PHOTIC]
+ *                                  v3.2.0
+ *
+ * This file is part of Photic, a collection of utilities for writing high-power
+ * rocket flight computer software. Developed in Austin, TX by the Longhorn
+ * Rocketry Association at the University of Texas at Austin.
+ *
+ *                            ---- THIS FILE ----
+ *
  * A History is a capacitated list with statistical analysis methods. Histories
  * begin with 0 elements and grow until they are at capacity. Once at capacity,
  * adding a new element will discard the oldest element in the History.

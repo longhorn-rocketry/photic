@@ -1,4 +1,13 @@
 /**
+ *                                 [PHOTIC]
+ *                                  v3.2.0
+ *
+ * This file is part of Photic, a collection of utilities for writing high-power
+ * rocket flight computer software. Developed in Austin, TX by the Longhorn
+ * Rocketry Association at the University of Texas at Austin.
+ *
+ *                            ---- THIS FILE ----
+ *
  * An interface for writing 9-DOF IMU device wrappers. Photic provides these
  * interfaces so that sensor drivers can be switched between easily, e.g. to
  * interface flight software with a hardware-out-of-the-loop simulation.
