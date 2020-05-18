@@ -39,12 +39,11 @@ RocketTracker::RocketTracker (const Config_t& kConfig) :
     // barometer readings.
     Real_t baroVar = 0;
     Real_t imuVar = 0;
-    Real_t launchpadAltitude = 0;
-    this->profileSensors (baroVar, imuVar, launchpadAltitude);
+    this->profileSensors (baroVar, imuVar, mLpAltitude);
 
     // Configure the Kalman filter.
     mKf.setDeltaT (kConfig.dt);
-    mKf.setInitialState (launchpadAltitude, 0, 0);
+    mKf.setInitialState (mLpAltitude, 0, 0);
     mKf.setSensorVariance (baroVar, imuVar);
     mKf.computeKg (kConfig.kgIterations);
 }
@@ -64,8 +63,16 @@ Vector3_t RocketTracker::track (const bool kRunSensors)
     Vector3_t vecAccelWorld = MathUtils::rotateVector (quatOrient, vecAccelRocket);
     Real_t accelVertical = vecAccelWorld[mVertAccelIdx];
 
-    // Filter and return new state.
+    // Get altitude estimate from barometer.
     Real_t altitude = mPBarometer->getAltitude ();
+
+    // Floor estimated altitude at the launchpad altitude. Large drops in
+    // measured altitude have been observed at liftoff during previous launches,
+    // likely due to the mass of inert air in the avionics bay rushing into
+    // the barometer.
+    altitude = altitude < mLpAltitude ? mLpAltitude : altitude;
+
+    // Filter new state.
     return mKf.filter (altitude, accelVertical);
 }
 

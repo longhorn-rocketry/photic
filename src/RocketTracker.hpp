@@ -142,6 +142,7 @@ private:
     BarometerInterface* mPBarometer; /* Rocket barometer interface. */
     const Dim_t mVertAccelIdx;       /* Accel vector idx w/ vertical comp. */
     KalmanFilter mKf;                /* Tracking Kalman filter. */
+    Real_t mLpAltitude;              /* Estimated launchpad altitude. */
 
     /**
      * Estimates the variance in altitude and acceleration readings by
