@@ -9,7 +9,7 @@ namespace Photic
 {
 
 /**
- * cstdint numeric types.
+ * cstdint types.
  */
 typedef char               int8_t;
 typedef unsigned char      uint8_t;
@@ -34,24 +34,6 @@ typedef float Real_t;
  * large data structures (more than 255 elements, in this case).
  */
 typedef uint8_t Dim_t;
-
-/**
- * Represents a time value. We default this to a real number since most rate
- * sensors report values in units per second, so it is most most convenient to
- * represent time as a floating point number of seconds.
- *
- * For users who prefer a different format, e.g. an integer number of milli or
- * nanoseconds, this type may be safely changed to support this. Photic
- * utilities which use time (e.g. Metronome, KalmanFilter) are agnostic of
- * whether this type is floating point or integral. (Note that an integral
- * Time_t will fail the Metronome unit tests.)
- *
- * Note that Photic::KalmanFilter places Time_t values into Photic::Matrix
- * objects which store Real_t contents. When changing Time_t, take care that
- * KalmanFilter does not overflow or lose precision. This goes for any functions
- * which use Time_t in combination with Real_t.
- */
-typedef Real_t Time_t;
 
 } // namespace Photic
 

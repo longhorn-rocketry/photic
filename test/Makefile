@@ -4,7 +4,7 @@ make test:
 	../src/KalmanFilter.cpp \
 	../src/IMUInterface.cpp \
 	../src/BarometerInterface.cpp \
-	../src/Metronome.cpp \
+	../src/RocketTracker.cpp \
 
 make clean:
 	rm TestMain

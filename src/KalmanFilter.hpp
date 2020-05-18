@@ -39,7 +39,9 @@
  *       need to be determined experimentally. We usually do between 25 and 50
  *       iterations, but this will ultimately depend on your sensors and thrust.
  *
- *   (5) This step is performed every iteration of the flight logic loop.
+ *   (5) This step is performed every iteration of the flight logic loop, at
+ *       a rate with timestep size corresponding to the value passed to
+ *       setDeltaT.
  *
  *       Take the altitude measurement from the barometer and the vertical
  *       acceleration reading from the IMU and pass them to
@@ -124,7 +126,7 @@ public:
      *
      * @param   kDt Timestep size.
      */
-    void setDeltaT (const Time_t kDt);
+    void setDeltaT (const Real_t kDt);
 
     /**
      * Sets the variance in altitude and acceleration readings.
@@ -153,6 +155,9 @@ public:
 
     /**
      * Advances the filter and returns a new state estimate.
+     *
+     * NOTE: This function must be called at a rate with timestep size
+     * corresponding to the value passed to setDeltaT.
      *
      * @param   kAlt   Current altitude reading.
      * @param   kAccel Current acceleration reading.

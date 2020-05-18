@@ -1,4 +1,5 @@
 #include "KalmanFilter.hpp"
+#include "MathUtils.hpp"
 
 namespace Photic
 {
@@ -7,9 +8,9 @@ KalmanFilter::KalmanFilter ()
 {
     // State transition matrix is initially the identity. The time-variant
     // elements which do the transition are set in setDeltaT.
-    mA = MatrixUtils::make3x3 (1, 0, 0,
-                               0, 1, 0,
-                               0, 0, 1);
+    mA = MathUtils::makeMatrix3 (1, 0, 0,
+                                 0, 1, 0,
+                                 0, 0, 1);
 
     // Process noise covariance is always 0. This is currently unused.
     mQ.fill (0);
@@ -28,12 +29,12 @@ KalmanFilter::KalmanFilter ()
 
     // Error covariance is initially the identity. This is computed
     // side-by-side with the Kalman gain in computeKg.
-    mP = MatrixUtils::make3x3 (1, 0, 0,
-                               0, 1, 0,
-                               0, 0, 1);
+    mP = MathUtils::makeMatrix3 (1, 0, 0,
+                                 0, 1, 0,
+                                 0, 0, 1);
 }
 
-void KalmanFilter::setDeltaT (const Time_t kDt)
+void KalmanFilter::setDeltaT (const Real_t kDt)
 {
     mA (0, 1) = kDt;
     mA (0, 2) = 0.5 * kDt * kDt;
@@ -50,14 +51,14 @@ void KalmanFilter::setSensorVariance (const Real_t kAltVar,
 void KalmanFilter::setInitialState (const Real_t kAlt, const Real_t kVel,
                                     const Real_t kAccel)
 {
-    mE = MatrixUtils::makeVector3 (kAlt, kVel, kAccel);
+    mE = MathUtils::makeVector3 (kAlt, kVel, kAccel);
 }
 
 void KalmanFilter::computeKg (const uint32_t kIterations)
 {
-    mP = MatrixUtils::make3x3 (1, 0, 0,
-                               0, 1, 0,
-                               0, 0, 1);
+    mP = MathUtils::makeMatrix3 (1, 0, 0,
+                                 0, 1, 0,
+                                 0, 0, 1);
     for (uint32_t i = 0; i < kIterations; i++)
     {
         this->computeKg ();
@@ -67,17 +68,17 @@ void KalmanFilter::computeKg (const uint32_t kIterations)
 void KalmanFilter::computeKg ()
 {
     Matrix<2, 2> x = mH * mP * mH.transpose () + mR;
-    mK = mP * mH.transpose () * MatrixUtils::invert2x2 (x);
-    Matrix<3, 3> i = MatrixUtils::make3x3 (1, 0, 0,
-                                           0, 1, 0,
-                                           0, 0, 1);
+    mK = mP * mH.transpose () * MathUtils::invert2x2 (x);
+    Matrix<3, 3> i = MathUtils::makeMatrix3 (1, 0, 0,
+                                             0, 1, 0,
+                                             0, 0, 1);
     mP = (i - mK * mH) * mP;
     mP = mA * mP * mA.transpose () + mQ;
 }
 
 Vector3_t KalmanFilter::filter (const Real_t kAlt, const Real_t kAccel)
 {
-    Vector2_t observation = MatrixUtils::makeVector2 (kAlt, kAccel);
+    Vector2_t observation = MathUtils::makeVector2 (kAlt, kAccel);
     Vector3_t estNew = mA * mE;
     Vector3_t estNewF = estNew + mK * (observation - mH * estNew);
     mE = estNewF;

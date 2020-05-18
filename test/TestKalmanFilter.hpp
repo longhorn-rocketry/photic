@@ -2,12 +2,12 @@
  * Tests for KalmanFilter.
  */
 
+#ifndef TEST_KALMAN_FILTER_HPP
+#define TEST_KALMAN_FILTER_HPP
+
 #include <ctime>
 #include <math.h>
 #include <random>
-
-#ifndef TEST_KALMAN_FILTER_HPP
-#define TEST_KALMAN_FILTER_HPP
 
 #include "KalmanFilter.hpp"
 #include "TestMacros.hpp"
@@ -64,6 +64,7 @@ void test ()
     // System state estimate by Kalman filter.
     Vector3_t stateFiltered (0);
 
+    // Run falling simulation loop.
     while (t < duration)
     {
         // Extrapolate true state.

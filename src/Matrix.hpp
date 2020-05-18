@@ -1,7 +1,6 @@
 /**
- * Linear algebra matrix class with a few of the operations useful for
- * GNC-related things. This file also defines some supporting utilities in
- * namespace MatrixUtils and convenience typedefs like Vector3_t.
+ * Linear algebra matrix class with a few simple operations. More complex
+ * operations can be found in MathUtils.hpp.
  *
  * NOTES:
  *
@@ -39,8 +38,6 @@
 
 namespace Photic
 {
-
-/********************************** MATRIX ************************************/
 
 template <Dim_t T_Rows, Dim_t T_Cols>
 class Matrix final
@@ -158,7 +155,7 @@ public:
     {
         Matrix<T_Rows, T_Cols> mat = *this;
 
-        for (Dim_t i = 0; i < ELEM_COUNT; i++)
+        for (uint32_t i = 0; i < ELEM_COUNT; i++)
         {
             mat.mData[i] += kRhs.mData[i];
         }
@@ -177,7 +174,7 @@ public:
     {
         Matrix<T_Rows, T_Cols> mat = *this;
 
-        for (Dim_t i = 0; i < ELEM_COUNT; i++)
+        for (uint32_t i = 0; i < ELEM_COUNT; i++)
         {
             mat.mData[i] -= kRhs.mData[i];
         }
@@ -215,6 +212,26 @@ public:
 
                 mat (i, j) = elem;
             }
+        }
+
+        return mat;
+    }
+
+    /**
+     * Computes this matrix times a scalar.
+     *
+     * @param   kScalar Scalar.
+     *
+     * @ret     Scaled matrix.
+     */
+    template <typename T_Scalar>
+    Matrix<T_Rows, T_Cols> operator* (const T_Scalar kScalar) const
+    {
+        Matrix<T_Rows, T_Cols> mat = *this;
+
+        for (uint32_t i = 0; i < ELEM_COUNT; i++)
+        {
+            mat.mData[i] = (Real_t) (mat.mData[i] * kScalar);
         }
 
         return mat;
@@ -261,100 +278,6 @@ public:
 typedef Matrix<2, 1> Vector2_t;
 typedef Matrix<3, 1> Vector3_t;
 typedef Matrix<4, 1> Vector4_t;
-
-/******************************* MATRIX UTILS *********************************/
-
-/**
- * Miscellaneous supporting utilities for Matrix.
- */
-namespace MatrixUtils
-{
-    /**
-     * Makes a 2x2 matrix.
-     *
-     * @param   eij (i, j)th element in matrix.
-     *
-     * @ret     Constructed matrix.
-     */
-    inline Matrix<2, 2> make2x2 (const Real_t e00, const Real_t e01,
-                                 const Real_t e10, const Real_t e11)
-    {
-        Matrix<2, 2> mat;
-
-        mat.mData[0] = e00; mat.mData[1] = e01;
-        mat.mData[2] = e10; mat.mData[3] = e11;
-
-        return mat;
-    }
-
-    /**
-     * Makes a 3x3 matrix.
-     *
-     * @param   eij (i, j)th element in matrix.
-     *
-     * @ret     Constructed matrix.
-     */
-    inline Matrix<3, 3> make3x3 (const Real_t e00, const Real_t e01, const Real_t e02,
-                                 const Real_t e10, const Real_t e11, const Real_t e12,
-                                 const Real_t e20, const Real_t e21, const Real_t e22)
-    {
-        Matrix<3, 3> mat;
-
-        mat.mData[0] = e00; mat.mData[1] = e01; mat.mData[2] = e02;
-        mat.mData[3] = e10; mat.mData[4] = e11; mat.mData[5] = e12;
-        mat.mData[6] = e20; mat.mData[7] = e21; mat.mData[8] = e22;
-
-        return mat;
-    }
-
-    /**
-     * Makes a 2-vector.
-     *
-     * @param   x X component.
-     * @param   y Y component.
-     *
-     * @ret     2-vector (x, y).
-     */
-    inline Matrix<2, 1> makeVector2 (const Real_t x, const Real_t y)
-    {
-        Matrix<2, 1> mat;
-
-        mat.mData[0] = x;
-        mat.mData[1] = y;
-
-        return mat;
-    }
-
-    /**
-     * Makes a 3-vector.
-     *
-     * @param   x X component.
-     * @param   y Y component.
-     * @param   z Z component.
-     *
-     * @ret     3-vector (x, y, z).
-     */
-    inline Matrix<3, 1> makeVector3 (const Real_t x, const Real_t y,
-                                     const Real_t z)
-    {
-        Matrix<3, 1> mat;
-
-        mat.mData[0] = x;
-        mat.mData[1] = y;
-        mat.mData[2] = z;
-
-        return mat;
-    }
-
-    inline Matrix<2, 2> invert2x2 (const Matrix<2, 2>& kMat)
-    {
-        Real_t determinant = kMat (0, 0) * kMat (1, 1) -
-                             kMat (0, 1) * kMat (1, 0);
-        return make2x2 ( kMat (1, 1) / determinant, -kMat (0, 1) / determinant,
-                        -kMat (1, 0) / determinant,  kMat (0, 0) / determinant);
-    }
-
-} // namespace MatrixUtils
 
 } // namespace Photic
 
