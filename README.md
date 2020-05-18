@@ -92,10 +92,10 @@ The best navigation solution will be highly specialized to the rocket it flies
 on. However, most high-power rockets are similar enough that `RocketTracker`
 will perform admirably if a good 9-DOF IMU and barometer are available. The
 following graph compares a rocket's velocity as estimated by `RocketTracker` and
-a Stratologger, a COTS flight computer (data taken from [this flight](https://github.com/longhorn-rocketry/telemetry-vault/tree/master/sli-odysseus-test-2-8-20)):
+a StratoLogger, a COTS flight computer (data taken from [this flight](https://github.com/longhorn-rocketry/telemetry-vault/tree/master/sli-odysseus-test-2-8-20)):
 
 <p align="center">
-    <img src="https://stefandebruyn.github.io/assets/images/photic-readme-graph.png">
+    <img src="https://stefandebruyn.github.io/assets/images/photic-readme-rockettracker-graph.png">
 </p>
 
 ---
