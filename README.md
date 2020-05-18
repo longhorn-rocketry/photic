@@ -13,7 +13,7 @@ complete C++ standard library.
 
 ---
 
-## Design Patterns
+## Patterns
 
 The utilities in Photic can simplify programming patterns commonly seen in
 high-power flight software. Several examples are shown below.
@@ -59,7 +59,7 @@ Photic::IMUInterface* pImu =
 
 ### Navigation
 
-This is less of a design pattern and more of a utility.
+This is less of a pattern and more of a utility.
 
 The rocket's altitude, velocity, and acceleration at a point in time are useful
 for informing control and recovery decisions. However, the rocket's state can
