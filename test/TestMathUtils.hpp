@@ -92,15 +92,15 @@ void testMathVectorConstructAccessMutate ()
 /**
  * Tests inverting a 2x2 matrix.
  */
-void testMathUtilsMatrixInvert2x2 ()
+void testMathUtilsMatrixInvertMatrix2 ()
 {
-    TEST_DEFINE ("MathUtilsMatrixInvert2x2");
+    TEST_DEFINE ("MathUtilsMatrixInvertMatrix2");
 
     Matrix<2, 2> mat0 = MathUtils::makeMatrix2 ( 1, 11,
                                                 -7, 25);
     Matrix<2, 2> mat1 = MathUtils::makeMatrix2 (25.0 / 102, -11.0 / 102,
                                                  7.0 / 102,   1.0 / 102);
-    Matrix<2, 2> mat2 = MathUtils::invert2x2 (mat0);
+    Matrix<2, 2> mat2 = MathUtils::invertMatrix2 (mat0);
     CHECK_TRUE (mat2 == mat1);
 }
 
@@ -166,7 +166,7 @@ void test ()
 {
     testMathUtilsMatrixConstruction ();
     testMathVectorConstructAccessMutate ();
-    testMathUtilsMatrixInvert2x2 ();
+    testMathUtilsMatrixInvertMatrix2 ();
     testMathUtilsCrossProduct ();
     testMathUtilsRotateVector ();
 }

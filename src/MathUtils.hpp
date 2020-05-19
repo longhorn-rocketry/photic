@@ -128,7 +128,7 @@ namespace MathUtils
      *
      * @ret     Inverted matrix.
      */
-    inline Matrix<2, 2> invert2x2 (const Matrix<2, 2>& kMat)
+    inline Matrix<2, 2> invertMatrix2 (const Matrix<2, 2>& kMat)
     {
         Real_t determinant = kMat (0, 0) * kMat (1, 1) -
                              kMat (0, 1) * kMat (1, 0);

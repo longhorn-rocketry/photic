@@ -90,7 +90,7 @@ Vector3_t KalmanFilter::filter (const Real_t kAlt, const Real_t kAccel)
 void KalmanFilter::computeKg ()
 {
     Matrix<2, 2> x = mH * mP * mH.transpose () + mR;
-    mK = mP * mH.transpose () * MathUtils::invert2x2 (x);
+    mK = mP * mH.transpose () * MathUtils::invertMatrix2 (x);
     Matrix<3, 3> i = MathUtils::makeMatrix3 (1, 0, 0,
                                              0, 1, 0,
                                              0, 0, 1);
