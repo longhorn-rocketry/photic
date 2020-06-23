@@ -2,11 +2,11 @@
 
 ## Photic
 
-Photic is a collection of utilities for writing high-power rocket flight
+Photic is a collection of utilities for writing high power rocket flight
 computer software. It was created to bring power and elegance to what is an
 oft-overlooked aspect of high power rocket development.
 
-Photic caters to low-power microprocessors by minimizing its memory footprint
+Photic caters to low power microprocessors by minimizing its memory footprint
 and external library dependencies. This also makes Photic highly portable. It is
 particularly suitable for Arduino or other embedded environments which lack a
 complete C++ standard library.
@@ -58,8 +58,6 @@ Photic::IMUInterface* pImu =
 ```
 
 ### Navigation
-
-This is less of a pattern and more of a utility.
 
 The rocket's altitude, velocity, and acceleration at a point in time are useful
 for informing control and recovery decisions. However, the rocket's state can
