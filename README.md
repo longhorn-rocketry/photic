@@ -39,7 +39,7 @@ while (!accelReadings.atCapacity () && accelReadings.getMean () < 30) // ~3 Gs
 
 Hardware-in-the-loop and hardware-out-of-the-loop simulation is a powerful tool
 for validating software in flight-like conditions on the ground. These
-simulations are typically require a way of spoofing sensor readings for
+simulations typically require a way of spoofing sensor readings for
 consumption by the flight software. Photic enables this with two abstract
 interfaces--`IMUInterface` and `BarometerInterface`--which standardize
 communication with these sensors.
